@@ -1,0 +1,31 @@
+//ID Styles
+#div-info-panel {
+    box-shadow: 0 .5rem 1rem var(--colShAlpha);
+    background-color: var(--colSecondary);
+    color: var(--colTtSecondary);
+}
+
+#div-info-panel > img {
+    margin: 1rem 0 1rem 0;
+}
+
+#ul-socials {
+    padding: 0;
+    margin: 0;
+}
+
+#ul-socials > li {
+    font-size: 3rem;
+    margin: 0 1rem 0 1rem;
+}
+
+#ul-socials > li > a {
+    color: var(--colTtSecondary);
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+#ul-socials > li > a:hover {
+    opacity: 1;
+    transition: 0.3s;
+}
