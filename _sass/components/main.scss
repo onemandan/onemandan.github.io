@@ -29,6 +29,17 @@
     text-align: justify;
 }
 
+#content-wrapper > .lead {
+    text-align: center;
+}
+
+//Class Styles
+.content-images-wrapper > img {
+    width: clamp(100px, 50%, 180px);
+    height: auto;
+    margin: 0 1rem;
+}
+
 //Element Styles
 body {
     background-color: var(--colBgSecondary);
