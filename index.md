@@ -56,7 +56,7 @@ Hardly keeping idle, I also enjoy the classics of <mark>hiking</mark>, <mark>run
 
 Finally, like many people who found themselves stuck at home with bags of time during the COVID-19 pandemic, I sought a creative outlet.  After having never properly played an instrument in my life, I decided to learn to play the <mark>piano</mark>.  Months of hard graft later, I finally got my stupid fingers to play some melodies and my stupid hands to work independently of one another.  I eventually achieved a full playthrough of the song 'Comptine d'un autre été' from the film 'Amélie'.
 
-<div class="content-images-wrapper container-fluid d-flex justify-content-center">
+<div class="content-images-wrapper-3 container-fluid d-flex justify-content-center">
     <img src="/assets/images/content/about/interest-climbing.png" alt="Bouldering">
     <img src="/assets/images/content/about/interest-hiking.png" alt="Hiking">
     <img src="/assets/images/content/about/interest-paragliding.png" alt="Paragliding">
