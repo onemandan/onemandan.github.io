@@ -1,0 +1,56 @@
+//ID Styles
+#div-wrapper {
+    background-color: var(--colBgPrimary);
+    box-shadow: 0 0 0.1rem var(--colShPrimary);
+    padding: 0;
+    min-height: 100vh;
+}
+
+#content-main {
+    padding: 2rem 0;
+    max-width: 100%;
+}
+
+#content-wrapper {
+    color: var(--colTtPrimary);
+    text-align: center;
+}
+
+#content-wrapper > h2 {
+    color: var(--colTtTertiary);
+    font-weight: 800;
+    margin-right: 1rem;
+}
+
+#content-wrapper > h2 > i {
+    margin-right: 1rem;
+}
+
+#content-wrapper > p {
+    text-align: justify;
+}
+
+#content-wrapper > .lead {
+    text-align: center;
+}
+
+//Class Styles
+.content-images-wrapper > img {
+    width: clamp(100px, 50%, 180px);
+    height: auto;
+    margin: 0 1rem;
+}
+
+//Element Styles
+body {
+    background-color: var(--colBgSecondary);
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+hr {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid var(--colShAlpha);
+}

@@ -1,0 +1,26 @@
+<form id="form-contact" class="row g-3 needs-validation" action="https://formspree.io/f/xjvdgzva" method="POST" novalidate>
+    <div id="div-input-name" class="col-md-6">
+        <label for="input-name" class="form-label">Full Name</label>
+        <input id="input-name" name="name" type="text" class="form-control" placeholder="Ada Lovelace" required>
+        <div class="invalid-feedback">
+            Please input your full name
+        </div>
+    </div>
+    <div id="div-input-email" class="col-md-6">
+        <label for="input-email" class="form-label">Email</label>
+        <input id="input-email" type="email" name="email" class="form-control" placeholder="ada@lovelace.co.uk" required>
+        <div class="invalid-feedback">
+            Please input a valid email address
+        </div>
+    </div>
+    <div class="col-12">
+        <label for="input-message" class="form-label">Message</label>
+        <textarea id="input-message" name="message" class="form-control" rows="6" placeholder="Hey Daniel! I was just wondering..." required></textarea>
+        <div class="invalid-feedback">
+            Please input a message
+        </div>
+    </div>
+    <div class="col-12 d-flex justify-content-center">
+        <button type="submit" value="submit" class="btn btn-primary">Send</button>
+    </div>
+</form>

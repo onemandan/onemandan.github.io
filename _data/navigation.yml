@@ -1,0 +1,9 @@
+- name: About
+  link: /
+  icon: fa-user
+- name: Blog
+  link: /blog.html
+  icon: fa-book
+- name: Contact
+  link: /contact.html
+  icon: fa-envelope
