@@ -35,8 +35,8 @@
 }
 
 //Class Styles
-.content-images-wrapper > img {
-    width: clamp(100px, 50%, 180px);
+.content-images-wrapper-3 > img {
+    width: min(33%, 180px);
     height: auto;
     margin: 0 1rem;
 }
