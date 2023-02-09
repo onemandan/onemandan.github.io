@@ -1,14 +1,11 @@
 ---
 ---
 
-//Base
-@import "base/colours";
-@import "base/forms";
-
 //Components
 @import "components/main";
 @import "components/navigation";
 @import "components/info-panel";
+@import "components/form";
 
 //Device Specific
 @import "device/media-queries";

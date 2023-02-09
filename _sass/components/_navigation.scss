@@ -1,0 +1,10 @@
+@use "base/vars";
+
+#nav-menu {
+    background-color: vars.$colour-primary;
+    box-shadow: 0 .5rem 1rem vars.$colour-shadow-alpha;
+    
+    .navbar-brand > img, .navbar-nav > a > i {
+        margin-right: 0.5rem;
+    }
+}
