@@ -1,9 +1,7 @@
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
-    body {
-        #div-wrapper {
-            margin-bottom: 5rem;
-            min-height: auto;
-        }
+    #div-wrapper {
+        margin-bottom: 5rem;
+        min-height: auto;
     }
 }
