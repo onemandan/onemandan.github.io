@@ -1,7 +1,6 @@
 ---
 layout: form
-title: Daniel Hough
-description: Tentatively Trying to Code
+title: Contact
 form: forms/contact
 ---
 

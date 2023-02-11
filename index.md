@@ -1,7 +1,6 @@
 ---
 layout: default
-title: Daniel Hough
-description: Tentatively Trying to Code
+title: About
 ---
 
 *[HTML]: Hyper Text Markup Language
@@ -21,7 +20,11 @@ I'm never quite inclined to be content with my knowledge base, which leads me to
 Creating a site requires a little bit of knowledge in HTML, but if you want it to look appealing, you're going to want to understand and implement some CSS.  Once a basic site is in place, you'll quickly realise that not all screen sizes are created equal and learn of the term *responsive design*.  To your horror, you'll have to update your CSS and implement media queries. However, a quick, panicked search reveals the world of CSS frameworks, such as Bootstrap.  Once all that is taken care of, you may actually want to start creating some content... but you recognise the fact that all of your boilerplate and static content has to be duplicated across each and every HTML page.  You think that's quite silly, so instead, you look into loading content dynamically through the use of *jQuery*... and then understand the limitations and redo everything using a <a href="https://www.cloudflare.com/en-gb/learning/performance/static-site-generator/" target="_blank">static site generator</a> such as *Jekyll*.  You get the gist: solving problems creates new problems, which you ultimately benefit from in the form of knowledge.
 
 <div class="alert alert-info" role="alert">
-    If you would like to take a look, all of my public projects are available via GitHub <a href="https://github.com/onemandan" target="_blank">@onemandan</a>
+    <div class="d-flex justify-content-center">
+        <span>
+            <strong>Note:</strong> If you would like to take a look, all of my public projects are available via GitHub <a href="https://github.com/onemandan" target="_blank">@onemandan</a>
+        </span>
+    </div>
 </div>
 
 <!-- End Section: Who am I? -->

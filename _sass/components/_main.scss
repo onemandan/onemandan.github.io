@@ -20,8 +20,15 @@ body {
 #content-wrapper {
     color: vars.$colour-text-primary;
     text-align: center;
-
-    >h2 {
+    
+    hr {
+        border-top: 1px solid vars.$colour-shadow-alpha;
+        margin: 1rem 0;
+        width: 100%;
+        border: 0;
+    }
+    
+    h2 {
         color: vars.$colour-text-tertiary;
         font-weight: 800;
         margin-right: 1rem;
@@ -31,11 +38,11 @@ body {
         }
     }
 
-    >p {
+    p, ul, .alert {
         text-align: justify;
     }
 
-    >.lead {
+    .lead {
         text-align: center;
     }
 
@@ -46,11 +53,31 @@ body {
             margin: 0 1rem;
         }
     }
-
-    hr {
-        border-top: 1px solid vars.$colour-shadow-alpha;
-        margin: 1rem 0;
-        width: 100%;
-        border: 0;
+    
+    .post-technology {
+        padding: 0.5rem;
+        background-color: vars.$colour-secondary;
+        color: vars.$colour-text-secondary;
+    }
+    
+    .post-published {
+        text-align: right;
+    }
+    
+    .post-image {
+        box-shadow: 0 0 0.1rem vars.$colour-shadow-primary;
+        border-radius: 0.5rem;
+        width: min(100%, 600px);
+        height: auto;
+        margin-bottom: 1rem;
+    }
+    
+    .post-preview {
+        text-decoration: none;
+        color: vars.$colour-text-primary;
+        
+        h3 {
+            color: vars.$colour-text-tertiary;
+        }
     }
 }
