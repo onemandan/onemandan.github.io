@@ -24,7 +24,7 @@ I won't go into how Phaser is setup, or how it needs to be run on a server, many
 
 #### Creating The Tilemap
 
-Before creating the Phaser game object, we need a tilemap image, as well as the JSON map file, obtained from Tiled.  You can find my tilemap image [here](/assets/projects/tilemap-editor/resources/tileset.png), and my JSON map file [here](/assets/projects/tilemap-editor/resources/tilemap.json).  If you're creating your own tile JSON map, you'll want to essentially create a *main area* where tiles can be placed and a *selection area* at the bottom where all available tiles to be placed are located (a palette if you will), separated by a single tile height of space, which creates two distinct areas. 
+Before creating the Phaser game object, a tilemap image is required, as well as a JSON map file, obtained from Tiled.  You can find my tilemap image [here](/assets/projects/tilemap-editor/resources/tileset.png), and my JSON map file [here](/assets/projects/tilemap-editor/resources/tilemap.json).  If you're creating your own tile JSON map, you'll want to essentially create a *main area* where tiles can be placed and a *selection area* at the bottom where all available tiles to be placed are located (a palette if you will), separated by a single tile height of space, which creates two distinct areas. 
 
 <figure>
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img1.png" alt="Tilemap layout">
@@ -35,7 +35,7 @@ Once a tileset and JSON tilemap are in place, create the basic Phaser setup.  Wi
 
 <script src="https://gist.github.com/onemandan/dd6ad147454b972f12b5465c92011fad.js"></script>
 
-This will leave you with a lovely black box corresponding to the config <code>width</code> and <code>height</code> properties. To actually load the tilemap, it needs to be initialised within the <code>create()</code> function.  Add a <code>_map</code> global variable and make the necessary calls to load the tilemap from the preloaded map key, and the tile layer utilising the preloaded tileset.
+This will create a lovely black box corresponding to the config <code>width</code> and <code>height</code> properties. To actually load the tilemap, it needs to be initialised within the <code>create()</code> function.  Add a <code>_map</code> global variable and make the necessary calls to load the tilemap from the preloaded map key, and the tile layer utilising the preloaded tileset.
 
 <script src="https://gist.github.com/onemandan/db8f3ca05434dfdc5a209e9960f5667d.js"></script>
 
@@ -146,38 +146,4 @@ There are a few improvements that can be made, which I won't go into detail how 
 - Utilise arrow keys to move the tile selection marker.
     - Allow the tile selection marker to wrap to the opposite side of the tile selection area.
 - Update the <code>UpdateTilePreview()</code> function so that the preview tile is updated prior to the mouse returning to the main tile area.
-- Add some helper text within the separator.
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+- Add some helper text within the separator.   
