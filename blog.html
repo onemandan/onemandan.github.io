@@ -16,7 +16,7 @@ title: Blog
         
         <p class="lead">{{ post.description }}</p>
 
-        <img class="post-image" src="/assets/images/posts/{{ post.image }}">
+        <img class="post-hero-image rounded" src="/assets/images/posts/{{ post.title }}/hero.png">
     </section>
     
     <p class="post-published"><strong>Published:</strong> {{ post.date | date_to_string }}</p>

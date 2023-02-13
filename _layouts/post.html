@@ -3,15 +3,15 @@ layout: default
 ---
 
 <section class="d-flex flex-column align-items-center">
-    <h2>{{ page.title }}</h2>
+    <h2><i class="fa-solid {{ page.icon }}"></i> {{ page.title }}</h2>
 
     <p class="lead">{{ page.description }}</p>
 
-    <img class="post-image" src="/assets/images/posts/{{ page.image }}">
+    <img class="post-hero-image rounded" src="/assets/images/posts/{{ page.title }}/hero.png">
 
     <div class="d-flex gap-2">
         {% for item in page.technologies %}
-            <span class="rounded post-technology">{{ item }}</span>
+            <span class="rounded post-technology"><strong>{{ item }}</strong></span>
         {% endfor %}
     </div>
 </section>
