@@ -7,10 +7,10 @@ layout: default
 
     <p class="lead">{{ page.description }}</p>
 
-    <img class="post-hero-image rounded" src="/assets/images/posts/{{ page.title }}/hero.png">
+    <img class="post-hero-image rounded" src="/assets/images/posts/{{ page.title }}/hero.png" alt="{{ page.title }} main image">
 
     <div class="d-flex gap-2">
-        {% for item in page.technologies %}
+        {% for item in page.tags %}
             <span class="rounded post-technology"><strong>{{ item }}</strong></span>
         {% endfor %}
     </div>

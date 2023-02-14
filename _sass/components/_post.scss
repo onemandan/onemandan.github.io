@@ -19,11 +19,25 @@
     }
     
     .post-preview {
-        text-decoration: none;
-        color: vars.$colour-text-primary;
-
-        h3 {
-            color: vars.$colour-text-tertiary;
+        cursor: pointer;
+        transition: vars.$transition-fast;
+        
+        h5 {
+            transition: vars.$transition-fast;
         }
+        
+        &:hover {
+            border-color: vars.$colour-highlight !important;
+            transition: vars.$transition-fast;
+            
+            h5 {
+                color: vars.$colour-text-tertiary;
+                transition: vars.$transition-fast;
+            }
+        }
+    }
+    
+    .post-excerpt {
+        height: 6rem;
     }
 }

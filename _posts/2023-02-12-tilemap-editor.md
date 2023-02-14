@@ -1,12 +1,16 @@
 ---
 layout: post
 title: Phaser Tilemap Editor
-description: Dynamic tilemap editor using Phaser 3
+description: Creating a dynamic tilemap editor using Phaser 3 and JavaScript
 icon: fa-rocket
-technologies:
+tags:
     - Phaser 3
     - JavaScript
 ---
+
+Recently, I had the urge to explore pathfinding algorithms on simple 2D grids.  To utilise these pathfinding algorithms (such as **A\***), I wanted to be able to test them on a dynamic grid, and as such, I decided to use the opportunity to learn - *at least a little* - <mark>Phaser 3</mark>.  Phaser 3 is a free, open source, HTML game framework, which allows you to create games using JavaScript, right in the browser.  Before looking into pathfinding algorithms, I wanted to create the ability to produce dynamic maps (2D grids) to test them, which ended up aligning perfectly with Phaser 3s <mark>tilemaps</mark>.
+
+I won't go into how Phaser is setup, or how it needs to be run on a server, many [guides](https://phaser.io/tutorials/getting-started-phaser3) already exist that cover this topic.  I'll also assume you're aware of what a tilemap is and how they are created using [Tiled](https://www.mapeditor.org/).  The tileset I used is courtesy of *[@schwarnhild](https://itch.io/profile/schwarnhild)* and can be found at [itch.io](https://schwarnhild.itch.io/basic-tileset-and-asset-pack-32x32-pixels).
 
 <div class="alert alert-info" role="alert">
     <div class="d-flex justify-content-center">
@@ -15,10 +19,6 @@ technologies:
         </span>
     </div>
 </div>
-
-Recently, I had the urge to explore pathfinding algorithms on simple 2D grids.  To utilise these pathfinding algorithms (such as **A\***), I wanted to be able to test them on a dynamic grid, and as such, I decided to use the opportunity to learn - *at least a little* - <mark>Phaser 3</mark>.  Phaser 3 is a free, open source, HTML game framework, which allows you to create games using JavaScript, right in the browser.  Before looking into pathfinding algorithms, I wanted to create the ability to produce dynamic maps (2D grids) to test them, which ended up aligning perfectly with Phaser 3s <mark>tilemaps</mark>.
-
-I won't go into how Phaser is setup, or how it needs to be run on a server, many [guides](https://phaser.io/tutorials/getting-started-phaser3) already exist that cover this topic.  I'll also assume you're aware of what a tilemap is and how they are created using [Tiled](https://www.mapeditor.org/).  The tileset I used is courtesy of *[@schwarnhild](https://itch.io/profile/schwarnhild)* and can be found at [itch.io](https://schwarnhild.itch.io/basic-tileset-and-asset-pack-32x32-pixels).
 
 <hr/>
 
