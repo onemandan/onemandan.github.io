@@ -1,8 +1,6 @@
-@use "base/vars";
-
 body {
-    background-color: vars.$colour-background-secondary;
-    font-family: vars.$font-primary;
+    background-color: $colour-background-secondary;
+    font-family: $font-primary;
 }
 
 header {
@@ -10,8 +8,8 @@ header {
 }
 
 #div-wrapper {
-    background-color: vars.$colour-background-primary;
-    box-shadow: 0 0 0.1rem vars.$colour-shadow-primary;
+    background-color: $colour-background-primary;
+    box-shadow: 0 0 0.1rem $colour-shadow-primary;
     padding: 0;
     min-height: 100vh;
 }
@@ -22,11 +20,11 @@ header {
 }
 
 #content-wrapper {
-    color: vars.$colour-text-primary;
+    color: $colour-text-primary;
     text-align: center;
     
     hr {
-        border-top: 1px solid vars.$colour-shadow-alpha;
+        border-top: 1px solid $colour-shadow-alpha;
         margin: 1rem 0;
         width: 100%;
         border: 0;
@@ -44,7 +42,7 @@ header {
         display: flex;
         justify-content: center;
         align-items: center;
-        color: vars.$colour-text-tertiary;
+        color: $colour-text-tertiary;
         font-weight: 800;
     }
 

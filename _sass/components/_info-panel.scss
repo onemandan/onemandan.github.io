@@ -1,9 +1,7 @@
-@use "base/vars";
-
 #div-info-panel {
-    background-color: vars.$colour-secondary;
-    box-shadow: 0 0.5rem 1rem vars.$colour-shadow-alpha;
-    color: vars.$colour-text-secondary;
+    background-color: $colour-secondary;
+    box-shadow: 0 0.5rem 1rem $colour-shadow-alpha;
+    color: $colour-text-secondary;
     padding-bottom: 0.5rem;
     
     >h1 {
@@ -12,7 +10,7 @@
     }
     
     >p {
-        font-family: vars.$font-secondary;
+        font-family: $font-secondary;
         font-size: 1.75rem;
     }
     
@@ -28,13 +26,13 @@
             margin: 0 1rem;
 
             >a {
-                color: vars.$colour-text-secondary;
-                transition: vars.$transition-fast;
+                color: $colour-text-secondary;
+                transition: $transition-fast;
                 font-size: 2rem;
                 opacity: 0.5;
                 
                 &:hover {
-                    transition: vars.$transition-fast;
+                    transition: $transition-fast;
                     opacity: 1;
                 }
             }
