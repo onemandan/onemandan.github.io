@@ -2,6 +2,7 @@
 layout: form
 title: Contact
 form: forms/contact
+permalink: /contact.html
 ---
 
 ## <i class="fa-solid fa-paper-plane"></i> Contact Me
