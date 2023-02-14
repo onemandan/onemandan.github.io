@@ -2,7 +2,24 @@
 /* global Phaser, window */
 
 window.onload = function(e){ 
-    let config = {
+
+    const _colourPrimary = 0xFFFFFF;        //White
+    const _colourSecondary = 0x000000;      //Black
+    const _colourTertiary = 0xFF9100;       //Orange
+    const _mapDividerIndex = 18;            //Tile number which separates the main tile palcement area from the tile selection area
+    const _layerMain = "Tile Layer 1";      //Default (main) tile layer
+    const _layerPreview = "Tile Layer 2";   //Preview tile layer (opacity 0.5)
+    
+    let _map;           //Main game tilemap
+    let _markerMap;     //Marker graphic representing mouse position
+    let _markerTile;    //Marker graphic representing tile selection
+    let _tileIndex;     //Selected tile index represented by @_markerTile, to place at @_markerMap on mouse down   
+    let _Keys;          //Input arrow cursors from the 'keyboard' namespace
+    
+    let _previewTile = { x: 0, y: 0, placed: false };  //Preview tile last placed position
+    
+    //Create Phaser game with config
+    new Phaser.Game({
         type: Phaser.AUTO,
         width: 576,
         height: 864,
@@ -13,34 +30,8 @@ window.onload = function(e){
             create: create,
             update: update
         }
-    };
+    });
     
-    const Keys = {
-        left: "left",
-        right: "right",
-        up: "up",
-        down: "down"
-    };
-
-    let _game = new Phaser.Game(config);
-    let _cursors;
-    let _cursorsPressed = { left: false, right: false, up: false, down: false };
-    
-    let _mapDividerIndex = 18;  //Tile number which separates the main tile palcement area from the tile selection area
-    
-    let _layerMain = "Tile Layer 1";    //Default (main) tile layer
-    let _layerPreview = "Tile Layer 2"; //Preview tile layer (opacity 0.5)
-    let _previewTile = { x: 0, y: 0, placed: false };  //Preview tile last placed position
-    
-    let _colourPrimary = 0xFFFFFF;      //White
-    let _colourSecondary = 0x000000;    //Black
-    let _colourTertiary = 0xFF9100;     //Orange
-    
-    let _map;           //Main game tilemap
-    let _markerMap;     //Marker representing mouse position
-    let _markerTile;    //Marker representing tile selection
-    let _tileIndex;     //Selected tile index represented by @_markerTile, to place at @_markerMap on mouse down
-
     function preload ()
     {        
         this.load.tilemapTiledJSON("map", "/assets/projects/tilemap-editor/resources/tilemap.json");
@@ -49,7 +40,13 @@ window.onload = function(e){
 
     function create ()
     {
-        _cursors = this.input.keyboard.createCursorKeys();
+        //Setup arrow keys
+        _Keys = {
+            left:   this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+            right:  this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+            up:     this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+            down:   this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+        };
         
         //Create the map from the loaded tilemap JSON
         _map = this.make.tilemap({ key: "map" });
@@ -126,69 +123,44 @@ window.onload = function(e){
         }
         
         //Keyboard input
-        HandleKeyboardInput(Keys.left);
-        HandleKeyboardInput(Keys.right);
-        HandleKeyboardInput(Keys.up);
-        HandleKeyboardInput(Keys.down);
-        
-        //Update the preview tile based on the current position to show a preview before placement
-        UpdatePreviewTile(_map.worldToTileX(_markerMap.x), _map.worldToTileY(_markerMap.y));
-    }
-    
-    //HandleKeyboardInput
-    //Processes the given input key.  Ensures that the processing for the key only happens once by toggling the corresponding keys pressed state
-    //@key - which key to handle
-    function HandleKeyboardInput(key) {
-        if (_cursors[key].isDown) {
-            if (!_cursorsPressed[key]) {
-                _cursorsPressed[key] = true;
-                
-                switch (key) {
-                    //Update tile marker within the tile selection palette
-                    //Left arrow key: Min 0, decrease X, wrap to _map.width
-                    case Keys.left:
-                        if (_map.worldToTileX(_markerTile.x) > 0) {
-                            UpdateTileMarker(_map.worldToTileX(_markerTile.x) - 1, _map.worldToTileX(_markerTile.y));
-                        } else {
-                            UpdateTileMarker(_map.width - 1, _map.worldToTileX(_markerTile.y));
-                        }
-                        
-                        break;
-                    //Right arrow key: Max _map.width, increase X, wrap to 0
-                    case Keys.right:
-                        if (_map.worldToTileX(_markerTile.x) < _map.width - 1) {
-                            UpdateTileMarker(_map.worldToTileX(_markerTile.x) + 1, _map.worldToTileX(_markerTile.y));
-                        } else {
-                            UpdateTileMarker(0, _map.worldToTileX(_markerTile.y));
-                        }
-                        
-                        break;
-                    //Up arrow key: Min _mapDividerIndex, decrease Y, wrap to _map.height
-                    case Keys.up:
-                        if (_map.worldToTileY(_markerTile.y) > _mapDividerIndex + 1) {
-                            UpdateTileMarker(_map.worldToTileX(_markerTile.x), _map.worldToTileX(_markerTile.y) - 1);
-                        } else {
-                            UpdateTileMarker(_map.worldToTileX(_markerTile.x), _map.height - 1);
-                        }
-                        
-                        break;
-                    //Down arrow key: Max _map.height, increase Y, wrap to _mapDividerIndex
-                    case Keys.down:
-                        if (_map.worldToTileY(_markerTile.y) < _map.height - 1) {
-                            UpdateTileMarker(_map.worldToTileX(_markerTile.x), _map.worldToTileX(_markerTile.y) + 1);
-                        } else {
-                            UpdateTileMarker(_map.worldToTileX(_markerTile.x), _mapDividerIndex + 1);
-                        }
-                        
-                        break;
-                }
+        //Left arrow key: Min 0, decrease X, wrap to _map.width
+        if (Phaser.Input.Keyboard.JustDown(_Keys.left)) {
+            if (_map.worldToTileX(_markerTile.x) > 0) {
+                UpdateTileMarker(_map.worldToTileX(_markerTile.x) - 1, _map.worldToTileX(_markerTile.y));
+            } else {
+                UpdateTileMarker(_map.width - 1, _map.worldToTileX(_markerTile.y));
             }
         }
         
-        //Reset the toggle bool for the key if it is lifted
-        if (_cursors[key].isUp) {
-            _cursorsPressed[key] = false;
+        //Right arrow key: Max _map.width, increase X, wrap to 0
+        if (Phaser.Input.Keyboard.JustDown(_Keys.right)) {
+            if (_map.worldToTileX(_markerTile.x) < _map.width - 1) {
+                UpdateTileMarker(_map.worldToTileX(_markerTile.x) + 1, _map.worldToTileX(_markerTile.y));
+            } else {
+                UpdateTileMarker(0, _map.worldToTileX(_markerTile.y));
+            }
         }
+        
+        //Up arrow key: Min _mapDividerIndex, decrease Y, wrap to _map.height
+        if (Phaser.Input.Keyboard.JustDown(_Keys.up)) {
+            if (_map.worldToTileY(_markerTile.y) > _mapDividerIndex + 1) {
+                UpdateTileMarker(_map.worldToTileX(_markerTile.x), _map.worldToTileX(_markerTile.y) - 1);
+            } else {
+                UpdateTileMarker(_map.worldToTileX(_markerTile.x), _map.height - 1);
+            }
+        }
+        
+        //Down arrow key: Max _map.height, increase Y, wrap to _mapDividerIndex
+        if (Phaser.Input.Keyboard.JustDown(_Keys.down)) {
+            if (_map.worldToTileY(_markerTile.y) < _map.height - 1) {
+                UpdateTileMarker(_map.worldToTileX(_markerTile.x), _map.worldToTileX(_markerTile.y) + 1);
+            } else {
+                UpdateTileMarker(_map.worldToTileX(_markerTile.x), _mapDividerIndex + 1);
+            }
+        }
+        
+        //Update the preview tile based on the current position to show a preview before placement
+        UpdatePreviewTile(_map.worldToTileX(_markerMap.x), _map.worldToTileY(_markerMap.y));
     }
     
     //UpdateTileMarker
