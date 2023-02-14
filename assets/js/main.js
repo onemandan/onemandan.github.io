@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global $, document, console, window, URL, localStorage */
+/* global $, document, console, window, URL, localStorage, Dotdotdot */
 
 (function() {
     "use strict";
@@ -36,6 +36,12 @@
     
     //On document ready
     $(document).ready(function () {
+        
+        if($(".post-excerpt").length > 0){
+            new Dotdotdot($(".post-excerpt")[0], {
+                ellipsis: " \u2026"
+            });
+        }
         
         //Set info panel on document ready
         ExpandCollapseInfoPanel();

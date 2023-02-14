@@ -1,0 +1,25 @@
+---
+layout: default
+---
+
+<section class="d-flex flex-column align-items-center">
+    <h2><i class="fa-solid {{ page.icon }}"></i> {{ page.title }}</h2>
+
+    <p class="lead">{{ page.description }}</p>
+
+    <img class="post-hero-image rounded" src="/assets/images/posts/{{ page.title }}/hero.png" alt="{{ page.title }} main image">
+
+    <div class="d-flex gap-2">
+        {% for item in page.tags %}
+            <span class="rounded post-technology"><strong>{{ item }}</strong></span>
+        {% endfor %}
+    </div>
+</section>
+
+<hr/>
+
+{{ content }}
+
+<hr/>
+
+<p class="post-published"><strong>Published:</strong> {{ page.date | date_to_string}}</p>

@@ -1,0 +1,35 @@
+---
+layout: default
+title: Blog
+---
+
+<h2><i class="fa-solid fa-pen-nib"></i> Latest Posts</h2>
+<p class="lead">Documenting some of my escapades</p>
+
+<hr/>
+
+
+<div class="row">
+    {% for post in site.posts %}
+    
+    <div class="col-lg-6">
+        <div class="card post-preview {% unless forloop.last %}mb-4{% endunless %}" onclick="location.href='{{ post.url }}';">
+            <img src="/assets/images/posts/{{ post.title }}/hero.png" class="card-img-top" alt="{{ post.title }} main image">
+            <h5 class="card-header">{{ post.title }}</h5>
+            <div class="card-body">
+                <h6 class="card-subtitle">{{ post.description }}</h6>
+                
+                <hr/>
+                <div class="post-excerpt mb-2">{{ post.excerpt }}</div>
+                <p class="card-text"><small class="text-muted"><strong>Published:</strong> {{ post.date | date_to_string }}</small></p>
+            </div>
+            <div class="card-footer text-muted">
+                {% for item in post.tags %}
+                    <span>{{ item }}{% unless forloop.last %},{% endunless %}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    {% endfor %}
+</div>

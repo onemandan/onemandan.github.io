@@ -1,0 +1,48 @@
+@use "base/vars";
+
+#div-info-panel {
+    background-color: vars.$colour-secondary;
+    box-shadow: 0 0.5rem 1rem vars.$colour-shadow-alpha;
+    color: vars.$colour-text-secondary;
+    padding-bottom: 0.5rem;
+    
+    >h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+    }
+    
+    >p {
+        font-family: vars.$font-secondary;
+        font-size: 1.75rem;
+    }
+    
+    >img {
+        margin: 1rem 0;
+    }
+    
+    #ul-socials {
+        padding: 0;
+        margin: 0;
+
+        >li {
+            margin: 0 1rem;
+
+            >a {
+                color: vars.$colour-text-secondary;
+                transition: vars.$transition-fast;
+                font-size: 2rem;
+                opacity: 0.5;
+                
+                &:hover {
+                    transition: vars.$transition-fast;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+    
+    #info-panel-expand-collapse {
+        cursor: pointer;
+        opacity: 0.5;
+    }
+}
