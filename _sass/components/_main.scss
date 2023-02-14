@@ -5,6 +5,10 @@ body {
     font-family: vars.$font-primary;
 }
 
+header {
+    margin-top: -315px;
+}
+
 #div-wrapper {
     background-color: vars.$colour-background-primary;
     box-shadow: 0 0 0.1rem vars.$colour-shadow-primary;
