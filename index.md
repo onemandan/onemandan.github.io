@@ -8,7 +8,7 @@ title: About
 
 <!-- Start Section: Who am I? -->
 
-## <i class="fa-solid fa-user"></i> Who Am I?
+<h2 class="me-3"><i class="me-3 fa-solid fa-user"></i>Who Am I?</h2>
 
 {: .lead}
 Hello there! I'm Daniel, an aspiring **software developer**, avid book reader, and cautious climber.
@@ -33,7 +33,7 @@ Creating a site requires a little bit of knowledge in HTML, but if you want it t
 
 <!-- Start Section: Education -->
 
-## <i class="fa-solid fa-graduation-cap"></i> Education
+<h2 class="me-3"><i class="me-3 fa-solid fa-graduation-cap"></i>Education</h2>
 
 {: .lead}
 What are my *actual* qualifications?
@@ -48,7 +48,7 @@ After studying for 4 years (inclusive of 1 year in industrial placement), I grad
 
 <!-- Start Section: Interests -->
 
-## <i class="fa-solid fa-person-hiking"></i> Interests
+<h2 class="me-3"><i class="me-3 fa-solid fa-person-hiking"></i>Interests</h2>
 
 {: .lead}
 Activities I get up to in my spare time
@@ -60,9 +60,9 @@ Hardly keeping idle, I also enjoy the classics of <mark>hiking</mark>, <mark>run
 Finally, like many people who found themselves stuck at home with bags of time during the COVID-19 pandemic, I sought a creative outlet.  After having never properly played an instrument in my life, I decided to learn to play the <mark>piano</mark>.  Months of hard graft later, I finally got my stupid fingers to play some melodies and my stupid hands to work independently of one another.  I eventually achieved a full playthrough of the song 'Comptine d'un autre été' from the film 'Amélie'.
 
 <div class="content-images-wrapper-3 container-fluid d-flex justify-content-center">
-    <img src="/assets/images/content/about/interest-climbing.png" alt="Bouldering">
-    <img src="/assets/images/content/about/interest-hiking.png" alt="Hiking">
-    <img src="/assets/images/content/about/interest-paragliding.png" alt="Paragliding">
+    <img class="mx-3" src="/assets/images/content/about/interest-climbing.png" alt="Bouldering">
+    <img class="mx-3" src="/assets/images/content/about/interest-hiking.png" alt="Hiking">
+    <img class="mx-3" src="/assets/images/content/about/interest-paragliding.png" alt="Paragliding">
 </div>
 
 <!-- End Section: Interests -->

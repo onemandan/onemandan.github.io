@@ -1,6 +1,5 @@
 #content-wrapper {
     .post-technology {
-        padding: 0.5rem;
         background-color: $colour-secondary;
         color: $colour-text-secondary;
     }
@@ -10,10 +9,8 @@
     }
 
     .post-hero-image {
-        box-shadow: 0 0 0.1rem $colour-shadow-primary;
         width: min(100%, 600px);
         height: auto;
-        margin-bottom: 1rem;
     }
     
     .post-preview {
