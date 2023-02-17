@@ -22,11 +22,12 @@ I won't go into how Phaser is setup, or how it needs to be run on a server, many
 
 <hr/>
 
+{: .text-center}
 #### Creating The Tilemap
 
 Before creating the Phaser game object, a tilemap image is required, as well as a JSON map file, obtained from Tiled.  You can find my tilemap image [here](/assets/projects/tilemap-editor/resources/tileset.png), and my JSON map file [here](/assets/projects/tilemap-editor/resources/tilemap.json).  If you're creating your own tile JSON map, you'll want to essentially create a *main area* where tiles can be placed and a *selection area* at the bottom where all available tiles to be placed are located (a palette if you will), separated by a single tile height of space, which creates two distinct areas. 
 
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img1.png" alt="Tilemap layout">
     <figcaption>Tilemap layout</figcaption>
 </figure>
@@ -41,7 +42,7 @@ This will create a lovely black box corresponding to the config <code>width</cod
 
 Once refreshed, the tilemap should now be showing.
 
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img2.png" alt="Tilemap intialised and loaded with tileset">
     <figcaption>Tilemap intialised and loaded with tileset</figcaption>
 </figure>
@@ -58,13 +59,14 @@ The tile selection panel doesn't currently look like a palette... it should pref
 
 As <code>_map.height</code> and <code>_map.width</code> are represented as height/width in tiles, they can simply be multiplied by <code>_map.tileHeight</code> and <code>_map.tileWidth</code> to obtain the sizes for the grid lines (taking into account <code>_mapDividerIndex</code>).  The above will have created a black grid over the tile selection palette area.
 
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img3.png" alt="Tile selection palette area with grid">
     <figcaption>Tile selection palette area with grid</figcaption>
 </figure>
 
 <hr/>
 
+{: .text-center}
 #### Creating Markers
 
 That's looking a lot better! The tile selection palette now looks like it has selectable tiles, although currently there isn't a way to know which tile has been selected.  There should be a marker for the main area to show where the selected tile will be placed, as well as a marker in the tile selection palette to show which tile has been selected.  The <code>CreateGraphic()</code> function can be reused to create the markers.  Global colour variables should also be used when passing the <code>colour</code> variable to keep things tidy.
@@ -73,7 +75,7 @@ That's looking a lot better! The tile selection palette now looks like it has se
 
 Note that a variable was passed to the <code>CreateGraphic()</code> function for the Y position using the attribute <code>_map.tileToWorldY</code>, which converts a tile index to a world space position.  The above will create two markers, just above and below <code>_mapDividerIndex</code>, the main area marker being white, and the tile selection marker being orange.
 
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img4.png" alt="Tilemap with markers">
     <figcaption>Tilemap with markers</figcaption>
 </figure>
@@ -92,13 +94,14 @@ The tilemap is in a space defined by tile indexes', whereas the mouse position i
 
 When the mouse is within the main tile area, the main tile marker will correspond with its position.  When the mouse is pressed within the tile selection area, the tile selection marker will show which tile is selected.  This will also only be processed when the mouse is within the bounds of the tilemap.
 
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img5.gif" alt="Tilemap markers positions' updating">
     <figcaption>Tilemap markers positions' updating</figcaption>
 </figure>
 
 <hr/>
 
+{: .text-center}
 #### Placing Tiles
 
 A tilemap has been loaded, the palette is clearly defined and there are markers showing hovered/selected tiles within the main and selection areas respectively.  It's time to actually place some tiles... almost.  A tile preview should be created so that within the main selection area marker, the tile that has been selected and is to be placed can be seen, before it is placed.  Tilemaps within Phaser use layers, so that decoration and asset layers can be placed upon the main layer.  This can be used to our advantage, in the sense of a preview layer, where the preview tile can be placed at the main markers position (the mouse position).  If this position is saved, it can be checked within the <code>update()</code> function to compare it to the current position, and if it is different, remove the tile at the previous position within the preview layer.  First and foremost:
@@ -122,7 +125,7 @@ The tilemap will now consist of two layers, the main layer, as derived from the 
 
 When a tile is selected from the tile selection palette and the mouse returns to the main tile area, the preview tile will update on the preview layer.
     
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img6.gif" alt="Preview tiles">
     <figcaption>Preview tiles</figcaption>
 </figure>
@@ -133,13 +136,14 @@ It is finally time to place a tile selected from the tile selection palette.  Si
 
 And there you have it, a simple tilemap editor created using Phaser 3!
 
-<figure>
+<figure class="text-center">
     <img class="rounded" src="/assets/images/posts/{{ page.title }}/img7.gif" alt="Finally placing some tiles">
     <figcaption>Finally placing some tiles</figcaption>
 </figure>
 
 <hr/>
 
+{: .text-center}
 #### Further Considerations
 
 There are a few improvements that can be made, which I won't go into detail how to create, but are able to be reviewed via the <a href="/assets/projects/tilemap-editor/js/tilemap-editor.js">final project code</a>.
