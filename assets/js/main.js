@@ -38,8 +38,10 @@
     $(document).ready(function () {
         
         if($(".post-excerpt").length > 0){
-            new Dotdotdot($(".post-excerpt")[0], {
-                ellipsis: " \u2026"
+            $(".post-excerpt").each(function(){
+                new Dotdotdot(this, {
+                    ellipsis: " \u2026"
+                });
             });
         }
         

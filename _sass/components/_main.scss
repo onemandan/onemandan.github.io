@@ -10,6 +10,11 @@ header {
     margin-top: -315px;
 }
 
+pre {
+    background-color: $colour-tertiary;
+    padding: 1rem;
+}
+
 hr {
     border-top: 1px solid $colour-shadow-alpha;
     margin: 1rem 0;
@@ -23,13 +28,8 @@ hr {
     min-height: 100vh;
 }
 
-#content-main {
-    max-width: 100%;
-}
-
 #content-wrapper {
     color: $colour-text-primary;
-    text-align: center;
     
     h2, h3, h4 {
         color: $colour-text-tertiary;
