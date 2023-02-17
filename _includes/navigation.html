@@ -2,7 +2,7 @@
     <div class="container-fluid">
         
         <!-- Navigation branding -->
-        <a class="navbar-brand" href="#">
+        <a class="me-3 navbar-brand" href="#">
             <img src="/assets/images/icon.png" alt="onemandan icon" width="32" height="32" class="d-inline-block align-text-center">
         </a>
         
@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 {% for item in site.data.navigation %}
-                <a href="{{ item.link }}" {% if page.url == item.link %} class="nav-link active" aria-current="page"{% else %} class="nav-link" {% endif %}><i class="fa-solid {{ item.icon }}"></i>{{ item.name }}</a>
+                <a href="{{ item.link }}" {% if page.url == item.link %} class="nav-link active" aria-current="page"{% else %} class="nav-link" {% endif %}><i class="me-2 fa-solid {{ item.icon }}"></i>{{ item.name }}</a>
                 {% endfor %}
             </div>
         </div>

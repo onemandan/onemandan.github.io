@@ -8,9 +8,9 @@ title: About
 
 <!-- Start Section: Who am I? -->
 
-## <i class="fa-solid fa-user"></i> Who Am I?
+<h2 class="me-3 text-center"><i class="me-3 fa-solid fa-user"></i>Who Am I?</h2>
 
-{: .lead}
+{: .lead .text-center}
 Hello there! I'm Daniel, an aspiring **software developer**, avid book reader, and cautious climber.
 
 Ever since my memory banks decided to start recording, I've been fascinated with puzzles and <mark>problem solving</mark>, which has given me a strong desire to <mark>learn kinaesthetically</mark>.  I don't always get things right (*that's where version control comes in handy*), but as long as I'm learning along the way, I have the <mark>drive to improve</mark>.  If I'm working on a project, or attempting to solve yet another programmatic problem, you'll typically find me awake in the late, peaceful hours of the night, chasing solutions to compiler errors. 
@@ -33,9 +33,9 @@ Creating a site requires a little bit of knowledge in HTML, but if you want it t
 
 <!-- Start Section: Education -->
 
-## <i class="fa-solid fa-graduation-cap"></i> Education
+<h2 class="me-3 text-center"><i class="me-3 fa-solid fa-graduation-cap"></i>Education</h2>
 
-{: .lead}
+{: .lead .text-center}
 What are my *actual* qualifications?
 
 Currently, I am a fellow of the Correlation-One Amazon Career Choice <mark>Software Development</mark> course (due to be completed in June 2023).
@@ -48,9 +48,9 @@ After studying for 4 years (inclusive of 1 year in industrial placement), I grad
 
 <!-- Start Section: Interests -->
 
-## <i class="fa-solid fa-person-hiking"></i> Interests
+<h2 class="me-3 text-center"><i class="me-3 fa-solid fa-person-hiking"></i>Interests</h2>
 
-{: .lead}
+{: .lead .text-center}
 Activities I get up to in my spare time
 
 <mark>Paragliding</mark> is without a doubt my favourite hobby.  There's something surreal and cathartic about launching yourself off a hill and gracefully soaring above the landscape below, before gently landing in an open field.  Unfortunately, it's also incredibly weather dependent, and living in the UK, well... it's not ideal.  Due to this, I took up <mark>climbing</mark>, both (majoritively) indoor, and outdoor.  I instantly fell in love with climbing (top rope and bouldering), as you're able to have fun while you're getting a workout, as well as quickly and noticeably progress your technique.  The dopamine levels are at an all time high when you climb a project that has a grade you believed was just out of reach.
@@ -60,9 +60,9 @@ Hardly keeping idle, I also enjoy the classics of <mark>hiking</mark>, <mark>run
 Finally, like many people who found themselves stuck at home with bags of time during the COVID-19 pandemic, I sought a creative outlet.  After having never properly played an instrument in my life, I decided to learn to play the <mark>piano</mark>.  Months of hard graft later, I finally got my stupid fingers to play some melodies and my stupid hands to work independently of one another.  I eventually achieved a full playthrough of the song 'Comptine d'un autre été' from the film 'Amélie'.
 
 <div class="content-images-wrapper-3 container-fluid d-flex justify-content-center">
-    <img src="/assets/images/content/about/interest-climbing.png" alt="Bouldering">
-    <img src="/assets/images/content/about/interest-hiking.png" alt="Hiking">
-    <img src="/assets/images/content/about/interest-paragliding.png" alt="Paragliding">
+    <img class="mx-3" src="/assets/images/content/about/interest-climbing.png" alt="Bouldering">
+    <img class="mx-3" src="/assets/images/content/about/interest-hiking.png" alt="Hiking">
+    <img class="mx-3" src="/assets/images/content/about/interest-paragliding.png" alt="Paragliding">
 </div>
 
 <!-- End Section: Interests -->

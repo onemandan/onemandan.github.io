@@ -1,6 +1,7 @@
 //Fonts
 $font-primary: 'Sofia Sans', sans-serif;
 $font-secondary: 'Inconsolata', monospace;
+$font-weight-title: 800;
 
 //Transitions
 $transition-slow: 0.5s;
@@ -18,3 +19,7 @@ $colour-text-secondary: #FFFFFF;
 $colour-text-tertiary: #FC5130;
 $colour-shadow-primary: #BEBFBC;
 $colour-shadow-alpha: rgba(0, 0, 0, 0.15);
+
+//Box Shadows
+$boxshadow-medium: 0 0.5rem 1rem;
+$boxshadow-outline: 0 0 0.1rem;
