@@ -22,7 +22,7 @@ A <code>HH:MM</code> time within Excel is a **double**, represented in the '*0-1
     <figcaption>Timespan timescales</figcaption>
 </figure>
 
-From the image above, it's easy to see where the timespans intersect (or not).  But how can this be done programatically and with the granularity of minutes, not just hours?  To mimic the above, arrays of 1440 elements (number of minutes in a day) could be created. Flags could be set within the necessary indicies and then they could simply be compared.  This seems a little too wild...
+From the image above, it's easy to see where the timespans intersect (or not).  But how can this be done programatically and with the granularity of minutes, not just hours?  To mimic the above, arrays of 1440 elements (number of minutes in a day) could be created. Flags could be set within the necessary indicies and then they could simply be compared.  But that seems a little too wild...
 
 <hr/>
 
@@ -42,11 +42,11 @@ intersect = median2 - median1 'Returns 02:00
 hours = intersect * 24 'Returns 2
 {% endhighlight %}
 
-voila, the amount of intersecting time between two timespans.  Producing this in VBA is extremely simple, although be aware the <code>Math</code> namespace does not contain the <code>Median()</code> function, and as such <code>WorksheetFunction</code> needs to be utilised.  To ensure a positive intersecting time, <code>Abs()</code> can be used.
+Viola, the amount of intersecting time between two timespans.  Producing this in VBA is extremely simple, although, be aware that the <code>Math</code> namespace does not contain the <code>Median()</code> function, and as such <code>WorksheetFunction</code> needs to be utilised.  To ensure a positive intersecting time, <code>Abs()</code> can be used.
 
 <script src="https://gist.github.com/onemandan/32c62dc8c7abd1ef2d3ea395ae1e9139.js"></script>
 
-If the timespans do not span midnight, the above solution is enough.  However, this will unfortunately not work as is for timespans that span midnight, due to the fact that once past midnight, the value increments from 0.  In this event, **if the end time is lower than the start time**, then the timespan spans midnight.  The end time can then be incremented by 1, to show that it is within the following day.  Both timespans need to be checked to determine if they span midnight.
+If the timespans do not span midnight, the above solution is enough.  However, this will unfortunately not work as is for timespans that span midnight, due to the fact that once past midnight, the value increments from 0.  In this event, **if the end time is lower than the start time**, then the timespan spans midnight.  The end time can then be incremented by 1, to ensure that it falls on the following day.  Both timespans need to be checked to determine if they span midnight.
 - If both timespans span midnight, the end times of both need to be incremented
 - If the first timespan spans midnight, then all times except the first start time needs to be incremented, and vice versa for the second timespan.
 
