@@ -37,14 +37,6 @@
     //On document ready
     $(document).ready(function () {
         
-        if($(".post-excerpt").length > 0){
-            $(".post-excerpt").each(function(){
-                new Dotdotdot(this, {
-                    ellipsis: " \u2026"
-                });
-            });
-        }
-        
         //Set info panel on document ready
         ExpandCollapseInfoPanel();
         
