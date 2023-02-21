@@ -8,7 +8,7 @@ tags:
     - VBA
 ---
 
-If you've ever worked with <code>HH:MM</code> times - or, god forbid... dates - in Excel, you are probably acutely aware of how much pain they can cause.  I stumbled upon a problem where I was required to obtain the amount of intersecting time between two timespans, each with a start and end time.  There was also no guarantee that the timespans didn't span midnight, or if they intersected at all, which was just another headache thrown into mix to deal with.
+If you've ever worked with <code>HH:MM</code> times - or, god forbid... dates - in Excel, you are probably acutely aware of how much pain they can cause.  I stumbled upon a problem where I was required to obtain the amount of intersecting time between two timespans, each with a start and end time.  There was also no guarantee that the timespans didn't span midnight, or if they intersected at all, which was just another headache thrown into the mix to deal with.
 
 <hr/>
 
@@ -22,7 +22,7 @@ A <code>HH:MM</code> time within Excel is a **double**, represented in the '*0-1
     <figcaption>Timespan timescales</figcaption>
 </figure>
 
-From the image above, it's easy to see where the timespans intersect (or not).  But how can this be done programatically and with the granularity of minutes, not just hours?  To mimic the above, arrays of 1440 elements (number of minutes in a day) could be created. Flags could be set within the necessary indicies and then they could simply be compared.  But that seems a little too wild...
+From the image above, it's obvious where the timespans intersect (or not).  But how can this be done programatically, and with the granularity of minutes, not just hours?  To mimic the above, arrays of 1440 elements (number of minutes in a day) could be created. Flags could be set within the necessary indicies and then they could simply be compared.  But that seems a little too wild...
 
 <hr/>
 
