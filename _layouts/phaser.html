@@ -1,26 +1,56 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <!-- Boilerplate -->
-        <title>{{ page.title }}</title>
-        <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
-        
-        <script src="/assets/js/phaser.min.js"></script>
-        
-        <style>
-            body {
-                height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            canvas {
-                border-style: solid;
-            }
-        </style>
-    </head>
+<html>        
+    {% include head.html %}
+    
     <body>
-        {{ content }}
+        <div class="container">
+            <div class="row">
+                <div id="div-wrapper" class="container-fluid d-flex flex-column">
+                    
+                    <nav id="nav-menu" class="navbar navbar-expand-lg navbar-dark sticky-top">
+                        <div class="container-fluid">
+                            
+                            <!-- Navigation branding -->
+                            <a class="me-3 navbar-brand" href="#">
+                                <img src="/assets/images/icon.png" alt="onemandan icon" width="32" height="32" class="d-inline-block align-text-center">
+                            </a>
+                            
+                            <!-- Collapsing navigation button -->
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            
+                            <!-- Navigation buttons -->
+                            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                                <div class="navbar-nav">
+                                    <a href="{{ page.post }}" class="nav-link"><i class="me-2 fa-solid fa-circle-arrow-left"></i>Return to Blog Post</a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                    
+                    <main class="container-fluid d-flex flex-column align-items-center">
+                        <div id="content-main"  class="pt-4 pb-5 mw-100 col-lg-8">
+                            <article id="content-wrapper" class="container-fluid d-flex flex-column">
+
+                                <section class="d-flex flex-column align-items-center">
+                                    <h2 class="me-3 text-center"><i class="me-3 fa-solid {{ page.icon }}"></i> {{ page.title }}</h2>
+
+                                    <p class="lead">{{ page.description }}</p>
+                                </section>
+                                
+                                <div id="phaser-wrapper" class="container-fluid d-flex justify-content-center"></div>
+
+
+
+                                {{ content }}
+                            </article>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+        
+        {% include foot.html %}
     </body>
 </html>
