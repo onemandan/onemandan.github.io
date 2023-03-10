@@ -4,10 +4,14 @@ window.onload = function(e){
 
     const _gameConfig = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 800,
         backgroundColor: '#000000',
-        pixelArt: true,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            parent: "phaser-wrapper",
+            width: 800,
+            height: 800,
+        },
         scene: {
             preload: Preload,
             create: Create
@@ -15,8 +19,8 @@ window.onload = function(e){
     };
 
     const _mapConfig = {
-        width: _gameConfig.width / 20,
-        height: _gameConfig.height / 20,
+        width: _gameConfig.scale.width / 20,
+        height: _gameConfig.scale.height / 20,
         tileWidth: 20,
         tileHeight: 20
     };
