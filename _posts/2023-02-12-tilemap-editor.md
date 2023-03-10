@@ -15,7 +15,7 @@ I won't go into how Phaser is setup, or how it needs to be run on a server, many
 <div class="alert alert-info" role="alert">
     <div class="d-flex justify-content-center">
         <span>
-            <strong>Note:</strong> Access and use the final project <a href="/projects/tilemap-editor.html">here</a>.  Review the code <a href="/assets/projects/tilemap-editor/js/tilemap-editor.js">here</a>.
+            <strong>Note:</strong> Access and use the final project <a href="/projects/tilemap-editor.html">here</a>.  Review the code <a href="https://github.com/onemandan/onemandan.github.io/blob/main/assets/projects/tilemap-editor/js/tilemap-editor.js">here</a>.
         </span>
     </div>
 </div>
