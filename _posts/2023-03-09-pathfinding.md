@@ -151,7 +151,7 @@ for each neighbor in neighbor_nodes(current)
 - Only need to visit a neighbour node if it hasn't already been added to the closed list.
     - The nodes <code>.closed</code> attribute replaced the closed list, it is used in place of searching a closed list.
 - Only need to (re)visit a neighbour node if it is either not on the open list, or a better score option is available.
-    - The nodes <code>.visited</code> attribute is usedd in place of searching the open list.
+    - The nodes <code>.visited</code> attribute is used in place of searching the open list.
 
 <script src="https://gist.github.com/onemandan/e75c9c87e957c0122e968d4bb02cd48b.js"></script>
 

@@ -4,14 +4,13 @@ window.onload = function(e){
 
     const _gameConfig = {
         type: Phaser.AUTO,
-        width: 1200,
+        width: 800,
         height: 800,
         backgroundColor: '#000000',
         pixelArt: true,
         scene: {
             preload: Preload,
-            create: Create,
-            update: GameTick
+            create: Create
         }
     };
 
@@ -22,15 +21,6 @@ window.onload = function(e){
         tileHeight: 20
     };
 
-    const _drawState = {
-        Draw: 0,
-        Clear: 1,
-        Idle: 2
-      };
-
-    let _map; //Tilemap 
-    let _path;
-
     //Preload
     function Preload () {
         this.load.image("tiles", "/assets/projects/pathfinding/resources/tileset.png");
@@ -38,79 +28,19 @@ window.onload = function(e){
 
     //Create
     function Create () {
-        Regenerate(this);
+        let map = this.make.tilemap({data: GenerateMap(_mapConfig.width, _mapConfig.height, 0, 9), tileWidth: _mapConfig.tileWidth, tileHeight: _mapConfig.tileHeight});
+        map.addTilesetImage("tiles");
+        map.createLayer(0, "tiles", 0, 0);
+        map.createBlankLayer("Layer Path", "tiles");
 
-        this.input.keyboard.on("keydown-ENTER", function () {
-            _map.destroy();
-            Regenerate(this);
-        }, this);
+        map.setLayer(1);
+        map.putTileAt(10, 0, 0); //Create path display tile at initial starting position
 
-        this.input.on("pointerdown", function (pointer) {
-            if (_path.state === _drawState.Idle){
-                //Round mouse pointer world position down to the nearest tile
-                let pointerTile = { x: _map.worldToTileX(pointer.x), y: _map.worldToTileY(pointer.y)};
-            
-                _path.endPos = pointerTile;
-                _path.nodes = AStar(_map.layers[0].data, _path.startPos, _path.endPos);
-                _path.idx = 0;
-                _path.nextDisplay = 0;
-                _path.state = _drawState.Draw;
-            }
-        }, this);
-    }
+        let pathNodes = AStar(map.layers[0].data, {x: 0, y: 0}, {x: 39, y: 39});
 
-    //GameTick
-    function GameTick (time, delta) {
-        if  (_path.state !== _drawState.Idle && (_path.nextDisplay > time || _path.nextDisplay === 0)) {
-            if (_path.idx < _path.nodes.length) {
-                let currentNode = _path.nodes[_path.idx];
-
-                if (_path.state === _drawState.Draw) {
-                    if (!currentNode.displayed) {
-                        _map.putTileAt(10, currentNode.x, currentNode.y);
-                        currentNode.displayed = true;
-
-                        _path.idx++;
-                        _path.nextDisplay = time + 1000;
-                    }
-                } else if (_path.state === _drawState.Clear) {
-                    if (currentNode.displayed) {
-                        if (_path.idx < _path.nodes.length - 1) {
-                            _map.putTileAt(-1, currentNode.x, currentNode.y);
-                        } else {
-                            _path.startPos = {x: currentNode.x, y: currentNode.y};
-                        }
-                        
-                        currentNode.displayed = false;
-                        _path.idx++;
-                        _path.nextDisplay = time + 1000;
-                    }
-                }
-            } else {
-                _path.idx = 0;
-                _path.nextDisplay = 0;
-                _path.state = _path.state + 1;
-            }
+        for (let i = 0; i < pathNodes.length; i++) {
+            map.putTileAt(10, pathNodes[i].x, pathNodes[i].y);
         }
-    }
-
-    function Regenerate(scene) {
-        _map = scene.make.tilemap({data: GenerateMap(_mapConfig.width, _mapConfig.height, 0, 9), tileWidth: _mapConfig.tileWidth, tileHeight: _mapConfig.tileHeight});
-        _map.addTilesetImage("tiles");
-        _map.createLayer(0, "tiles", 0, 0);
-        _map.createBlankLayer("Layer Path", "tiles");
-
-        _map.setLayer(1);
-        _map.putTileAt(10, 0, 0); //Create path display tile at initial starting position
-
-        _path = {
-            startPos: {x: 0, y: 0}, //Starting position of the pathfinding path
-            endPos: undefined,      //End position of the pathfinding path
-            nodes: [],              //Array of nodes from @startPos to @endPos
-            idx: 0,                 //Current index of @nodes being drawn/cleared
-            nextDraw: 0,            //Time of when the next @idx can be drawn
-            state: _drawState.Idle  //Current state - Draw/Clear/Idle
-        };
     }
 
     //GenerateMap
@@ -157,7 +87,6 @@ window.onload = function(e){
                 this.parent = undefined;
                 this.closed = false;
                 this.visited = false;
-                this.displayed = false;
             }
 
             Update(node, score) {
