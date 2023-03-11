@@ -7,7 +7,6 @@ window.onload = function(e){
         backgroundColor: '#000000',
         scale: {
             mode: Phaser.Scale.FIT,
-            autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "phaser-wrapper",
             width: 800,
             height: 800,
