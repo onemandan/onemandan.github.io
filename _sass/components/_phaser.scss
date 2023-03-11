@@ -14,3 +14,9 @@
         }
     }
 }
+
+pre > .control {
+    color: $colour-text-code;
+    font-family: $font-secondary;
+    font-weight: 600;
+}

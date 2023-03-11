@@ -21,10 +21,13 @@ window.onload = function(e){
     //Create Phaser game with config
     new Phaser.Game({
         type: Phaser.AUTO,
-        width: 576,
-        height: 864,
         backgroundColor: '#000000',
-        pixelArt: true,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            parent: "phaser-wrapper",
+            width: 576,
+            height: 864,
+        },
         scene: {
             preload: preload,
             create: create,
