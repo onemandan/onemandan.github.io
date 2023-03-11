@@ -1,6 +1,7 @@
 ---
 layout: default
 title: About
+description: A brief summary of Daniel Hough, AKA onemandan
 ---
 
 *[HTML]: Hyper Text Markup Language

@@ -1,0 +1,22 @@
+#div-info-bar {
+    background-color: $colour-secondary;
+    box-shadow: 0 0.5rem 1rem $colour-shadow-alpha;
+    color: $colour-text-secondary;
+
+    > a {
+        color: $colour-text-secondary;
+        transition: $transition-fast;
+        opacity: 0.5;
+        
+        &:hover {
+            transition: $transition-fast;
+            opacity: 1;
+        }
+    }
+}
+
+pre > .control {
+    color: $colour-text-code;
+    font-family: $font-secondary;
+    font-weight: 600;
+}
