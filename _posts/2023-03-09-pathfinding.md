@@ -13,7 +13,7 @@ I've previously created a [Tilemap Editor](/2023/02/12/tilemap-editor.html) util
 <div class="alert alert-info" role="alert">
     <div class="d-flex justify-content-center">
         <span>
-            <strong>Note:</strong> Access and use the final project <a href="/projects/pathfinding.html">here</a>.  Review the code <a href="/assets/projects/pathfinding/js/pathfinding.js">here</a>.
+            <strong>Note:</strong> Access and use the final project <a href="/projects/pathfinding.html">here</a>.  Review the code <a href="https://github.com/onemandan/onemandan.github.io/blob/main//assets/projects/pathfinding/js/pathfinding.js">here</a>.
         </span>
     </div>
 </div>
