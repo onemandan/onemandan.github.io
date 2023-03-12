@@ -31,7 +31,7 @@ tags:
 <section>
     <h4 class="text-center mb-4">The Median Solution</h4>
 
-    <p>Fortunately, the <code>Median</code> function has the ability to relieve the misery.  The median of a set of given numbers is the midpoint and since dates/times in Excel are **doubles** it can be used to obtain the midpoint of timespans.  The median of 12:00 (0.5) and 00:00 (1) is 18:00 (0.75).  The median of 12:00 (0.5), 00:00 (1) and 18:00 (0.75) is 18:00 (0.75).</p>
+    <p>Fortunately, the <code>Median</code> function has the ability to relieve the misery.  The median of a set of given numbers is the midpoint and since dates/times in Excel are <strong>doubles<strong> it can be used to obtain the midpoint of timespans.  The median of 12:00 (0.5) and 00:00 (1) is 18:00 (0.75).  The median of 12:00 (0.5), 00:00 (1) and 18:00 (0.75) is 18:00 (0.75).</p>
 
     <p>Let's apply this knowledge to the green timespan above.</p>
 
@@ -51,7 +51,7 @@ hours = intersect * 24 'Returns 2
 
     <script src="https://gist.github.com/onemandan/32c62dc8c7abd1ef2d3ea395ae1e9139.js"></script>
 
-    <p>If the timespans do not span midnight, the above solution is enough.  However, this will unfortunately not work as is for timespans that span midnight, due to the fact that once past midnight, the value increments from 0.  In this event, **if the end time is lower than the start time**, then the timespan spans midnight.  The end time can then be incremented by 1, to ensure that it falls on the following day.  Both timespans need to be checked to determine if they span midnight.</p>
+    <p>If the timespans do not span midnight, the above solution is enough.  However, this will unfortunately not work as is for timespans that span midnight, due to the fact that once past midnight, the value increments from 0.  In this event, <strong>if the end time is lower than the start time</strong>, then the timespan spans midnight.  The end time can then be incremented by 1, to ensure that it falls on the following day.  Both timespans need to be checked to determine if they span midnight.</p>
 
     <ul>
         <li>If both timespans span midnight, the end times of both need to be incremented</li>
