@@ -1,4 +1,8 @@
 #content-wrapper {
+    figcaption {
+       opacity: 0.4; 
+    }
+
     .post-technology {
         background-color: $colour-secondary;
         color: $colour-text-secondary;
