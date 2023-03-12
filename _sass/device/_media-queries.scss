@@ -5,3 +5,18 @@
         min-height: auto;
     }
 }
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+    .figure-left {
+        float: left;
+        margin-right: 1rem;
+        margin-bottom: 0;
+    }
+
+    .figure-right {
+        float: right;
+        margin-left: 1rem;
+        margin-bottom: 0;
+    }
+}

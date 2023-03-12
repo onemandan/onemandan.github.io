@@ -1,0 +1,62 @@
+---
+layout: post
+title: Excel Intersecting Timespans
+description: Obtaining the amount of intersecting time between timespans in Excel, utilising VBA
+icon: fa-file-excel
+tags:
+    - Excel
+    - VBA
+---
+
+<p>If you've ever worked with <code>HH:MM</code> times - or, god forbid... dates - in Excel, you are probably acutely aware of how much pain they can cause.  I stumbled upon a problem where I was required to obtain the amount of intersecting time between two timespans, each with a start and end time.  There was also no guarantee that the timespans didn't span midnight, or if they intersected at all, which was just another headache thrown into the mix to deal with.</p>
+
+<hr/>
+
+<section>
+    <h4 class="text-center mb-4">The Timeless Problem</h4>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/timespans.png" alt="Timespan timescales">
+        <figcaption>Timespan timescales</figcaption>
+    </figure>
+
+    <p>A <code>HH:MM</code> time within Excel is a <strong>double</strong>, represented in the '<em>0-1</em>' range.  00:00 is 0, and also 1 (with an extra day).  12:00 is 0.5.  This tends to make working with timespans somewhat confusing.  Let's reframe the problem to better understand it using a simple timescale.</p> 
+
+    <p>From the image, it's obvious where the timespans intersect (or not).  But how can this be done programatically, and with the granularity of minutes, not just hours?  To mimic the above, arrays of 1440 elements (number of minutes in a day) could be created. Flags could be set within the necessary indicies and then they could simply be compared.  But that seems a little too wild...</p>
+
+</section>
+
+<hr/>
+
+<section>
+    <h4 class="text-center mb-4">The Median Solution</h4>
+
+    <p>Fortunately, the <code>Median</code> function has the ability to relieve the misery.  The median of a set of given numbers is the midpoint and since dates/times in Excel are <strong>doubles</strong> it can be used to obtain the midpoint of timespans.  The median of 12:00 (0.5) and 00:00 (1) is 18:00 (0.75).  The median of 12:00 (0.5), 00:00 (1) and 18:00 (0.75) is 18:00 (0.75).</p>
+
+    <p>Let's apply this knowledge to the green timespan above.</p>
+
+    <ul>
+        <li>Timespan 1, start time: 08:00, end time: 12:00</li>
+        <li>Timespan 2, start time: 10:00, end time: 13:00</li>
+    </ul>
+
+    <pre>
+median1 = Median(08:00, 12:00, 10:00) 'Returns 10:00 
+median2 = Median(08:00, 12:00, 13:00) 'Returns 12:00 
+intersect = median2 - median1 'Returns 02:00
+hours = intersect * 24 'Returns 2
+    </pre>
+
+    <p>Viola, the amount of intersecting time between two timespans.  Producing this in VBA is extremely simple, although, be aware that the <code>Math</code> namespace does not contain the <code>Median</code> function, and as such <code>WorksheetFunction</code> needs to be utilised.  To ensure a positive intersecting time, <code>Abs</code> can be used.</p>
+
+    <script src="https://gist.github.com/onemandan/32c62dc8c7abd1ef2d3ea395ae1e9139.js"></script>
+
+    <p>If the timespans do not span midnight, the above solution is enough.  However, this will unfortunately not work as is for timespans that span midnight, due to the fact that once past midnight, the value increments from 0.  In this event, <strong>if the end time is lower than the start time</strong>, then the timespan spans midnight.  The end time can then be incremented by 1, to ensure that it falls on the following day.  Both timespans need to be checked to determine if they span midnight.</p>
+
+    <ul>
+        <li>If both timespans span midnight, the end times of both need to be incremented</li>
+        <li>If the first timespan spans midnight, then all times except the first start time needs to be incremented, and vice versa for the second timespan.</li>
+    </ul>
+
+    <script src="https://gist.github.com/onemandan/19b4e7a45456ad9fe4a055a1c8645ab5.js"></script>
+</section>

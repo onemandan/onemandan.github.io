@@ -1,6 +1,28 @@
-import { SimplexNoise } from "./simplex-noise.js";
+import { createNoise2D } from "./simplex-noise.js";
 
 window.onload = function(e){ 
+
+    class Node {
+        constructor(x, y, weight) {
+            this.x = x;
+            this.y = y;
+            this.g = 0;
+            this.h = 0;
+            this.f = 0;
+            this.weight = weight;
+            this.parent = undefined;
+            this.closed = false;
+            this.visited = false;
+        }
+
+        Update(pNode, gScore, hScore) {
+            this.visited = true;
+            this.parent = pNode;
+            this.g = gScore;
+            this.h = hScore;
+            this.f = this.g + this.h;
+        }
+    }
 
     const _gameConfig = {
         type: Phaser.AUTO,
@@ -24,6 +46,9 @@ window.onload = function(e){
         tileHeight: 20
     };
 
+    let _noise2D;
+    let _tilemap;
+
     //Preload
     function Preload () {
         this.load.image("tiles", "/assets/projects/pathfinding/resources/tileset.png");
@@ -31,19 +56,37 @@ window.onload = function(e){
 
     //Create
     function Create () {
-        let map = this.make.tilemap({data: GenerateMap(_mapConfig.width, _mapConfig.height, 0, 9), tileWidth: _mapConfig.tileWidth, tileHeight: _mapConfig.tileHeight});
-        map.addTilesetImage("tiles");
-        map.createLayer(0, "tiles", 0, 0);
-        map.createBlankLayer("Layer Path", "tiles");
+        DrawTilemapPath(GenerateTilemap(this));
 
-        map.setLayer(1);
-        map.putTileAt(10, 0, 0); //Create path display tile at initial starting position
+        this.input.keyboard.on("keydown-ENTER", function () {
+            _tilemap.destroy();
 
-        let pathNodes = AStar(map.layers[0].data, {x: 0, y: 0}, {x: 39, y: 39});
+            DrawTilemapPath(GenerateTilemap(this));
+        }, this);
+    }
+
+    function DrawTilemapPath(grid) {
+        //Get a path from the top left corner, to the bottom right corner
+        let pathNodes = AStar(grid, {x: 0, y: 0}, {x: _mapConfig.width - 1, y: _mapConfig.height - 1});
 
         for (let i = 0; i < pathNodes.length; i++) {
-            map.putTileAt(10, pathNodes[i].x, pathNodes[i].y);
+            _tilemap.putTileAt(10, pathNodes[i].x, pathNodes[i].y);
         }
+    }
+
+    function GenerateTilemap(scene) {
+        _noise2D = createNoise2D(); //Recreate the noise2D function so ensure a new seed
+
+        let grid = GenerateGrid(_mapConfig.width, _mapConfig.height, 0, 9);
+
+        _tilemap = scene.make.tilemap({data: grid, tileWidth: _mapConfig.tileWidth, tileHeight: _mapConfig.tileHeight});
+        _tilemap.addTilesetImage("tiles");
+        _tilemap.createLayer(0, "tiles");
+        _tilemap.createBlankLayer(1, "tiles");
+        _tilemap.setLayer(1);
+        _tilemap.putTileAt(10, 0, 0); //Create path display tile at initial starting position
+
+        return grid;
     }
 
     //GenerateMap
@@ -52,107 +95,79 @@ window.onload = function(e){
     //@height - The height of the grid to create
     //@minIndex - The minimum tile index to populate the grid with
     //@maxIndex - The maximum tile index to populate the grid with
-    function GenerateMap(width, height, minIndex, maxIndex) {
-        let map = [];
-        let gen = new SimplexNoise();
+    function GenerateGrid(width, height, minIndex, maxIndex) {
+        let grid = [];
 
         //Noise
         //Returns a noise value based on @x and @y, rescaling from -1.0:+1.0 to 0.0:1.0
         //@x
         //@y
         function Noise(x, y) {
-            return gen.noise2D(x, y) / 2 + 0.5;
+            return _noise2D(x, y) / 2 + 0.5;
         }
 
         for (let y = 0; y < height; y++) {
-            map[y] = [];
+            grid[y] = [];
             for (let x = 0; x < width; x++ ) {
-                let nx = x/width - 0.5
-                let ny = y/height - 0.5;
-
-                map[y][x] = Math.floor(Noise(nx * 2.5, ny * 2.5) * (maxIndex - minIndex + 1)) + minIndex;
+                grid[y][x] = Math.round(Noise(x / 16, y / 16) * (maxIndex - minIndex) + minIndex);
             }
         }
 
-        return map;
+        return grid;
     }
 
-    function AStar(tiles, start, end) {
-        
-        class Node {
-            constructor(x, y, weight) {
-                this.x = x;
-                this.y = y;
-                this.g = 0;
-                this.h = 0;
-                this.f = 0;
-                this.weight = weight + 1;
-                this.parent = undefined;
-                this.closed = false;
-                this.visited = false;
+    //AStar
+    //
+    function AStar(grid, start, end) {
+
+        function InitGrid() {
+            let gridNodes = []
+
+            for (let y = 0; y < grid.length; y++) {
+                gridNodes[y] = []
+                for (let x = 0; x < grid[0].length; x++) {
+                    gridNodes[y][x] = new Node(x, y, grid[y][x] + 1);
+                }
             }
 
-            Update(node, score) {
-                this.visited = true;
-                this.parent = node;
-                this.g = score;
-                this.h = this.#Heuristic(node.x, node.y);
-                this.f = this.g + this.h;
-            }
-
-            Neighbours(grid, width, height) {
-                let x = this.x;
-                let y = this.y;
-                let neighbours = [];
-
-                //North
-                if(y - 1 >= 0) {
-                    neighbours.push(grid[y - 1][x]);
-                }
-
-                //South
-                if(y + 1 < height) {
-                    neighbours.push(grid[y + 1][x]);
-                }
-
-                //East
-                if(x + 1 < width) {
-                    neighbours.push(grid[y][x + 1]);
-                }
-                
-                //West
-                if(x - 1 >= 0) {
-                    neighbours.push(grid[y][x - 1]);
-                }
-        
-                return neighbours;
-            }
-
-            #Heuristic(x, y) {
-                let d1 = Math.abs(this.x - x);
-                let d2 = Math.abs(this.y - y);
-                return d1 + d2;
-            }
+            return gridNodes
         }
 
-        function InitGrid(width, height) {
-            let grid = []
+        function Neighbours(currentNode, gridNodes) {
+            let x = currentNode.x;
+            let y = currentNode.y;
+            let neighbours = [];
 
-            for (let y = 0; y < height; y++) {
-                grid[y] = []
-                for (let x = 0; x < width; x++) {
-                    let tile = tiles[y][x];
-
-                    grid[y][x] = new Node(tile.x, tile.y, tile.index);
-                }
+            //North
+            if(gridNodes[y - 1]) {
+                neighbours.push(gridNodes[y - 1][x]);
             }
 
-            return grid
+            //South
+            if(gridNodes[y + 1]) {
+                neighbours.push(gridNodes[y + 1][x]);
+            }
+
+            //East
+            if(gridNodes[y][x + 1]) {
+                neighbours.push(gridNodes[y][x + 1]);
+            }
+            
+            //West
+            if(gridNodes[y][x - 1]) {
+                neighbours.push(gridNodes[y][x - 1]);
+            }
+    
+            return neighbours;
         }
 
-        let gridHeight = tiles.length; 
-        let gridWidth = tiles[0].length;
-        let gridNodes = InitGrid(gridWidth, gridHeight);
+        function Heuristic(node1, node2) {
+            let d1 = Math.abs(node1.x - node2.x);
+            let d2 = Math.abs(node1.y - node2.y);
+            return d1 + d2;
+        }
+
+        let gridNodes = InitGrid();
         let openNodes = [];
 
         //Set the end node and push the start node to the open list
@@ -186,12 +201,12 @@ window.onload = function(e){
                 return path.reverse();
             }
 
-            //Remove the current node from the open list, and set it's closed status
+            //Remove the current node from the open list, and set its closed status
             openNodes.splice(idx, 1);
             currentNode.closed = true;
 
             //Get the neighbours of the current node and loop through them
-            let neighbourNodes = currentNode.Neighbours(gridNodes, gridWidth, gridHeight);
+            let neighbourNodes = Neighbours(currentNode, gridNodes);
 
             for (let i = 0; i < neighbourNodes.length; i++) {
                 let neighbourNode = neighbourNodes[i];
@@ -209,7 +224,7 @@ window.onload = function(e){
                             openNodes.push(neighbourNode);
                         }
                         
-                        neighbourNode.Update(currentNode, gScore);
+                        neighbourNode.Update(currentNode, gScore, Heuristic(neighbourNode, endNode));
                     } 
                 }
             }

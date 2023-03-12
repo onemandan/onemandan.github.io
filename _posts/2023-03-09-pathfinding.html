@@ -1,0 +1,243 @@
+---
+layout: post
+title: Pathfinding from A to B
+description: Pathfinding with the A* algorithm utilising Phaser 3 tilemaps
+icon: fa-compass
+tags:
+    - Phaser 3
+    - JavaScript
+---
+
+<p>I've previously created a <a href="/2023/02/12/tilemap-editor.html">Tilemap Editor</a> utilising <mark>Phaser 3</mark> and it was originally my plan to use this as a basis to explore pathfinding.  However, I realised that it would be more beneficial to showcase pathfinding with a larger tilemap that has differing terrain weights to simulate traversal costs. I ended up delving into basic random generation using noise to create an interesting tilemap to traverse, before using the A* pathfinding algorithm to solve paths between two points on it.<p>
+
+<div class="alert alert-info" role="alert">
+    <div class="d-flex justify-content-center">
+        <span>
+            <strong>Note:</strong> Access and use the final project <a href="/projects/pathfinding.html">here</a>.  Review the code <a href="https://github.com/onemandan/onemandan.github.io/blob/main//assets/projects/pathfinding/js/pathfinding.js">here</a>.
+        </span>
+    </div>
+</div>
+
+<hr/>
+
+<section>
+    <h4 class="text-center mb-4">Generating a Tilemap</h4>
+
+    <p>When traversing from a start point to an end point seperated by distance (and teleportation isn't possible), there needs to be points between that can be referenced so that a path can be constructed.  In games where objects move between positions, objects move along a path formed from a list of invisible nodes.  These lists of nodes can be stored in various ways, from simple grids to fully fledged navigation graphs.</p> 
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/tilemap.png" alt="Tile indexes within a tileset">
+        <figcaption>Tile indexes within a tileset</figcaption>
+    </figure>
+
+    <p>In Phaser 3, tilemaps use layers, each of which contains a 2D array - in the xy space - of tiles, which can be utilised to create a grid for pathfinding.  A tilemap can be initialised with a 2D array (automatically added to a layer), which expects elements to contain a tile index.  A tile index is the index of a region within a tileset, which is used to represent the tile visually.  A tileset is simply an image and tiles are obtained from that image from the top left, to the bottom right, stepped using a tile width and height.</p>
+
+    <p>For pathfinding, I wanted to ensure the tiles had different traversal costs (weight) associated to them, so that the resulting path would avoid '<em>high cost</em>' tiles, in favour of '<em>low cost</em>' tiles.  To this end, a tileset image can be created with a row of squares from a light shade to a darker shade, and the resulting tile indexes can be used to represent the weight.  This means that a tileset with 10 squares would result in 10 tiles with an index from 0-9, represented from light to dark, so that the darker tiles would result in a higher traversal cost.</p>
+
+    <p>With all that in mind and a <a href="\assets\projects\pathfinding\resources\tileset.png" target="_blank">tileset</a> in hand, a simple function can be created to generate a 2D array, which randomly assigns each element with a (whole) value between 0 and 9, infering the tile index <strong>and</strong> weight.</p>
+
+    <script src="https://gist.github.com/onemandan/29b09b4c4670a2ba7020433f351c2b93.js"></script>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/random-tilemap.png" alt="randomly generated tilemap">
+        <figcaption>Randomly generated tilemap</figcaption>
+    </figure>
+
+    <p>Within the <code>GenerateGrid</code> function, a 2D array is created according to the <code>width</code> and <code>height</code> parameters and fills each element with a random (floored) number, between the <code>minIndex</code> and <code>maxIndex</code> parameters (0 and 9 respectively).  The resulting array is passed to the <code>make.tilemap</code> function via the <code>data</code> attribute within an options parameter object.  After setting the tileset image and creating the layers, the tilemap is rendered with the 2D array as its datasource, which contains the indexes relating to the tilseset.</p>
+
+    <p>Despite the tilemap being randomised, it is a little bit underwhelming, as it's just a blob of differing tiles.  It'd be much more interesting if it had a touch of <em>meaning</em>.  It's a common practice with terrain/heightmap generation to use <strong>noise</strong> as a building block, as it's procedural.  There are incredible, highly detailed <a href="https://www.redblobgames.com/maps/terrain-from-noise/">write-ups</a> and <a href="https://catlikecoding.com/unity/tutorials/pseudorandom-noise/">tutorial series'</a> regarding applicable uses for noise, and many libraries exist that are ready to use, such as this <a href="https://github.com/jwagner/simplex-noise.js">Simplex Noise</a> JavaScript implementation.</p>  
+
+    <p>A few minor changes can be made to the <code>GenerateGrid</code> function to incorporate noise.</p>
+
+    <script src="https://gist.github.com/onemandan/5af4526ca832133bf57b063377137c3d.js"></script>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/noise-tilemap.png" alt="tilemap generated with noise">
+        <figcaption>Tilemap generated with noise</figcaption>
+    </figure>
+
+    <p>I don't have the mathematical chops to understand exactly how Simplex Noise works, but simply put, it uses a grid to add nearby values to produce numbers between -1.0 and 1.0 that look linearly-interpolated.  The tilemap in use is only a 40x40 grid and as such isn't granular enough to warrant an implementation of octaves, persistence and amplitudes.  The <code>noise2D</code> function is simply plugged with the x and y values of the 2D array, divided by an arbitrary number that I'll pretend is a frequency (which is how '<em>zoomed</em>' in the noise is).  This produces a much more interesting tilemap to traverse.</p>
+</section>
+
+<hr/>
+
+<section>
+    <h4 class="text-center mb-4">Pathfinding Algorithms</h4>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/pathfinding.png" alt="simple pathfinding example">
+        <figcaption>Simple pathfinding example</figcaption>
+    </figure>
+
+    <p>It may be easy to understand that navigating the above tilemap means avoiding the darker areas, as they've been deemed more '<em>expensive</em>' than the lighter areas.  To do this programatically, <a href="https://en.wikipedia.org/wiki/Pathfinding#Algorithms">pathfinding algorithms</a> such as Dijkstra's and A* are employed.  Pathfinding algorithms start at a single element/graph node/vertex and explore their adjacent neighbours until the end goal is reached.  Dijkstra's algorithm works on a cost basis, whereby the cost from the current node to its neighbours are obtained and compared, so that the lower cost node can be explored next.  A* works in the same way as Dijkstra's algorithm, except in addition to calculating a cost to a neighbour, a heuristic is also used, which is a function to determine an <strong>estimated</strong> cost to the goal.  The heuristic used tends to be determined by the type of movement that is allowed - if only adjacent movement, then typically <strong>Manhattan</strong> distance is used, whereas <strong>Euclidean</strong> is used if diagonals are allowed.</p>
+
+    <figure class="text-center figure-right">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/heuristic.png" alt="heuristic manhattan vs euclidean">
+        <figcaption>Manhattan (red) vs Euclidean (blue)</figcaption>
+    </figure>
+
+    <p>The A* algorithm uses a '<em>G</em>' score (the score from the start node, to the current node), a '<em>H</em>' score (the heuristic cost from the current node to the end node) and an '<em>F</em>' score (overall cost, G + H).  Alongside this, '<em>open</em>' and '<em>closed</em>' lists are maintained to store the nodes that have yet to be visited, and those that have been visited, respectively.</p>
+
+    <p>The pseudocode for the A* algorithm will hopefully make it much easier to understand.  Although, there are a few minor caveats for this simple tilemap use case:</p>
+
+    <ul>
+        <li>A closed list does not necessarily need to be used, as it is only utilised to store nodes that have been calcualted and had their neighbours added to the open list.</li>
+        <li>It isn't necessary to set the '<em>F</em>' score of the start node, as it will initially be the only node in the open list, and would immediately be added to the closed list.</li>
+        <li>In this implementation, the Manhattan distance will be used</li>
+    </ul>
+
+    <pre>
+function A*(start,goal)
+    closedset := the empty set // The set of nodes already evaluated.
+    openset := {start} // The set of tentative nodes to be evaluated, initially containing the start node
+    came_from := the empty map // The map of navigated nodes.
+
+    g_score[start] := 0 // Cost from start along best known path.
+    // Estimated total cost from start to goal through y.
+    f_score[start] := g_score[start] + heuristic_cost_estimate(start, goal)
+
+    while openset is not empty
+        current := the node in openset having the lowest f_score[] value
+        if current = goal
+            return reconstruct_path(came_from, goal)
+
+        remove current from openset
+        add current to closedset
+        for each neighbor in neighbor_nodes(current)
+            if neighbor in closedset
+                continue
+            tentative_g_score := g_score[current] + dist_between(current,neighbor)
+
+            if neighbor not in openset or tentative_g_score < g_score[neighbor] 
+                came_from[neighbor] := current
+                g_score[neighbor] := tentative_g_score
+                f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
+                if neighbor not in openset
+                    add neighbor to openset
+
+    return failure
+    </pre>
+</section>
+
+<hr>
+
+<section>
+    <h4 class="text-center mb-4">Initialising a Suitable Grid</h4>
+
+    <p>Before making complete sense of the pseudocode for the A* algorithm, a suitable grid of nodes needs to be initialised that the A* algorithm can search.  Despite the fact that a grid containing weights has already been created for the tilemap, a new grid will need to be created to store all the required node information.  This also has the added benefit that nodes can be derived from start and end positions and directly compared with the '===' operator to check if the end goal has been reached.</p>
+
+    <p>To do this, a <code>Node</code> class is created so that each node within the grid can store all the required data that the A* algorithm needs:</p>
+
+    <ul>
+        <li><code>X</code> and <code>Y</code> position, so that the resulting path of nodes can be redrawn on the tilemap.</li>
+        <li><code>G</code>, <code>H</code> and <code>F</code> scores to calculate the cost of the node</li>
+        <li><code>Weight</code> of the node, which will affect its <code>G</code> score</li>
+        <li><code>Parent</code> to reconstruct the path from the start node, to the end node</li>
+        <li><code>Closed</code> flag, to determine if the node has already been calculated and therefore popped from the open list</li>
+        <li><code>Visited</code> flag, whether or not the node is on the open list, instead of searching the list</li>
+    </ul>
+
+    <script src="https://gist.github.com/onemandan/c7c7c8a02ea59cbf72ee9bf999e48540.js"></script>
+
+    <p>With the <code>Node</code> class in place, a grid of nodes can be created, much in the same way that <code>GenerateMap</code> creates the 2D array for the tilemap.  Although, this time around, instead of the elements containing the tileset index/weight, they will contain an instance of <code>Node</code>, remembering to increment the weight as it is 0 indexed.</p>
+
+    <script src="https://gist.github.com/onemandan/d97b124a6675132730f93f283fa45937.js"></script>
+</section>
+
+<hr>
+
+<section>
+    <h4 class="text-center mb-4">Navigating a Noisy Grid</h4>
+
+    <p>It's time to step through the pseudocode of the A* algorithm and implement it piece by piece.  As described above, the initial <code>F</code> score of the start node doesn't need to be set, nor does a closed list need to be created, both can be skipped in this use case.</p>
+
+    <pre>
+openset := {start} // The set of tentative nodes to be evaluated, initially containing the start node
+
+while openset is not empty
+    </pre>
+
+    <p>Simple enough, create an open list that contains the start node and begin the main loop of the algorithm.  The end node will also be initialised here, as the <code>start</code> and <code>end</code> parameters are expected to be simple position objects.</p>
+
+    <script src="https://gist.github.com/onemandan/1bce4f1583869d99da0c3dd4522207c7.js"></script>
+
+    <pre>
+current := the node in openset having the lowest f_score[] value
+    </pre>
+
+    <p>The <code>F</code> score is the combined <code>G</code> and <code>H</code> scores of the node, and the A* algorithm greedily looks for the best node to explore from.  Therefore, the open list needs to be iterated to find the node with the lowest <code>F</code> score.  A possible future improvement is to ensure the open list is always sorted by <code>F</code> score.</p>
+
+    <script src="https://gist.github.com/onemandan/25027723d9f46e292920c0027f7e7f78.js"></script>
+
+    <pre>
+if current = goal
+    return reconstruct_path(came_from, goal)
+    </pre>
+
+    <p>Since the grid has been initialised with instances of the <code>Node</code> class, the <code>currentNode</code> can simply be compared to the <code>endNode</code> to check if the goal has been reached.  The <code>Node</code> class also has a <code>parent</code> attribute, which will be set with a neighbour nodes parent node.  This will allow the iteration through the nodes <code>parent</code> attribute until there is no longer a parent (adding each node along the way), to create the path result.</p>
+
+    <script src="https://gist.github.com/onemandan/e75c9c87e957c0122e968d4bb02cd48b.js"></script>
+
+    <pre>
+remove current from openset
+add current to closedset
+for each neighbor in neighbor_nodes(current)
+    </pre>
+
+    <p>Once a node has been evaluated, it is moved from the open list to the closed list, although in this case, it is removed from the open list and the nodes <code>closed</code> flag attribute is set.  To obtain the neighbours for a given node, a list needs to be created of the available nodes to its north, east, south and west.  If diagonal movement is allowed, the north east, south east, south west and north west nodes would also be included.</p>
+
+    <script src="https://gist.github.com/onemandan/46897f682e8777fa0b9352527b0c25bc.js"></script>
+
+    <pre>
+for each neighbor in neighbor_nodes(current)
+    if neighbor in closedset
+        continue
+    tentative_g_score := g_score[current] + dist_between(current,neighbor)
+
+    if neighbor not in openset or tentative_g_score < g_score[neighbor] 
+    </pre>
+
+    <p>Once the neighbours are obtained for the <code>currentNode</code>, they can be explored and evaluated.  Any <code>neighbourNode</code> that has already been evaluated will have its <code>closed</code> flag attribute set and can therefore be ignored.  The <code>G</code> score is obtained, which is the <code>G</code> score of the <code>currentNode</code> with the addition of the <code>neighbourNode</code> weight.  Instead of iterating through the open list to check if the <code>neighbourNode</code> is in it, the <code>visited</code> attribute can be used.  If the <code>neighbourNode</code> has not been visited, or if it has, but the <code>G</code> score is better, then it can be evaluated.</p>
+
+    <script src="https://gist.github.com/onemandan/9ef18677f11bada341e75fa841a5683e.js"></script>
+
+    <pre>
+came_from[neighbor] := current
+g_score[neighbor] := tentative_g_score
+f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
+if neighbor not in openset
+    add neighbor to openset
+    </pre>
+
+    <p>The final step of the A* algorithm is to update the <code>neighbourNode</code> and add it to the open list if it is not already present.  An <code>Update</code> function can be added to the <code>Node</code> class to do this.  A function to determine the <strong>Heuristic</strong> cost between the <code>neighbourNode</code> and the <code>endNode</code> will also need to be created and in this case, the <strong>Manhattan</strong> distance will be used.</p>
+
+    <script src="https://gist.github.com/onemandan/cc4d1a537cbf9cec9369b0d32a015b91.js"></script>
+
+    <p>As the path is expected to be found within the main loop of the algorithm, if the loop is escaped (the open list is empty and therefore there are no new nodes to explore), then a path has not been found.  Outside of the main loop, an empty array can be returned to signify this.  Although, in this case, all nodes can be explored and therefore, a path should <em>always</em> be found.</p>
+</section>
+
+<hr>
+
+<section>
+    <h4 class="text-center mb-4">Paving the Way</h4>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/path-tilemap.png" alt="tilemap with a path">
+        <figcaption>Tilemap with an A* path</figcaption>
+    </figure>
+
+    <p>The A* algorithm is now implemented, however, the path still needs to be drawn to the tilemap.</p>
+
+    <p>The <code>Astar</code> function returns either an empty array, or an array that contains nodes from the start point, to the end point.  This array can simply be looped through, and tiles can be placed within the tilemap using the tilemap <code>putTileAt</code> function, using the final tile index within the tileset.</p>
+
+    <p>The tilemap is initialised with randomly generated noise on page load.  It's quite silly to regenerate both the tilemap and the path by refreshing the page, it'd be better if this could be triggered by a control key.  New functions, <code>GenerateTilemap</code> and <code>DrawTilemapPath</code> will need to be created, with code lifted from the <code>create</code> function.  Using the Phaser <code>input.keyboard.on</code> function, an event listener can be added to a key, calling the new functions.  The <code>noise2D</code> function will also need to be reseeded, so that the random noise is different.
+
+    <script src="https://gist.github.com/onemandan/25aae5ea7721d3792ed5bd6c84ba9809.js"></script>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/tilemap-regenerate.gif" alt="tilemap regenerating">
+        <figcaption>Tilemap regenerating on key press</figcaption>
+    </figure>
+
+    <p>Now every time the <strong>enter</strong> key is pressed, the grid is regenerated and the A* algorithm is used to obtain a new path, from the top left corner to the bottom right corner.</p>
+</section>
