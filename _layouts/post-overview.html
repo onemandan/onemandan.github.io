@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>        
+    {% include head.html %}
+    
+    <body>
+        <div class="container">
+            <div class="row">
+                <div id="div-wrapper" class="container-fluid d-flex flex-column">
+                    
+                    {% include navigation.html %}
+                    
+                    <header>
+                        {% include info-panel.html %}
+                    </header>
+                    
+                    <main class="container-fluid d-flex flex-column align-items-center">
+                        <div id="content-main"  class="pt-4 pb-5 mw-100">
+                            <article id="content-wrapper" class="container-fluid d-flex flex-column">
+                                {{ content }}
+                            </article>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+        
+        {% include foot.html %}
+    </body>
+</html>
