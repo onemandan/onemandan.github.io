@@ -4,7 +4,7 @@
 (function() {
     "use strict";
     
-    const lcsCollapse = "ipcollapse";
+    const lcsExpand = "ipexpand";
     const btnCollapse = "#info-panel-expand-collapse";
     
     //ExpandCollapseInfoPanel
@@ -27,10 +27,10 @@
         }
         
         //Expand/collapse the info panel
-        if(JSON.parse(localStorage.getItem(lcsCollapse))) {
-            ExpandCollapse("-315px", "180deg");
+        if(JSON.parse(localStorage.getItem(lcsExpand))) {
+           ExpandCollapse("0px", "-180deg");
         } else {
-            ExpandCollapse("0px", "0deg");
+            ExpandCollapse("-315px", "0deg");  
         }
     }
     
@@ -44,11 +44,11 @@
         $(btnCollapse).click(function (e) {
             
             //LocalStorage only stores strings, and as such, need to stringify data types.
-            if(localStorage.getItem(lcsCollapse) === null) {
-                localStorage.setItem(lcsCollapse, JSON.stringify(true)); 
+            if(localStorage.getItem(lcsExpand) === null) {
+                localStorage.setItem(lcsExpand, JSON.stringify(true)); 
             } else {
                 //Toggle expand/collapse on click
-                localStorage.setItem(lcsCollapse, JSON.stringify(!JSON.parse(localStorage.getItem(lcsCollapse)))); 
+                localStorage.setItem(lcsExpand, JSON.stringify(!JSON.parse(localStorage.getItem(lcsExpand)))); 
             }
             
             ExpandCollapseInfoPanel(true);

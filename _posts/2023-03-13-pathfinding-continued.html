@@ -1,0 +1,131 @@
+---
+layout: post
+title: Pathfinding Continued
+description: Expanding the horizons of the A* algorithm pathfinding project
+icon: fa-compass
+tags:
+    - Phaser 3
+    - JavaScript
+---
+
+<p>This project continues on from my initial foray into <a href="/2023/03/09/pathfinding.html">pathfinding with Phaser 3 tilemaps</a>.  As soon as I completed the previous project I had multiple ideas to expand it further, such as allowing diagonal movement through a modified heuristic, making it appear more visually appealing and adding in some <mark>user interaction</mark>.<p>
+
+<div class="alert alert-info" role="alert">
+    <div class="d-flex justify-content-center">
+        <span>
+            <strong>Note:</strong> Access and use the final project <a href="/projects/pathfinding-v2.html">here</a>.  Review the code <a href="https://github.com/onemandan/onemandan.github.io/blob/main//assets/projects/pathfinding-v2/js/pathfinding.js">here</a>.
+        </span>
+    </div>
+</div>
+
+<hr/>
+
+<section>
+    <h4 class="text-center mb-4">A Rook No More</h4>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/heuristic.png" alt="heuristic manhattan vs euclidean">
+        <figcaption>Manhattan (red) vs Euclidean (blue)</figcaption>
+    </figure>
+
+    <p>Currently, only adjacent movement to the direct north, east, south and west of nodes is permitted.  A pathfinding algorithm that can move diagonally will produce more efficient paths to traverse, by the simple notion that it can effectively ignore nodes where diagonal movement is favoured.  There is a single main requirement to allow diagonal movement, being the fact that the <code>Neighbour</code> function that returns the direct neighbours of a given node, also needs to return nodes to its north east, south east, south west and north west.  With potentially 8 neighbours being returned from the <code>Neighbour</code> function, diagonal nodes would be getting added to the open list and evaluated.  The <strong>Manhattan</strong> distance could still be used to evaulate the nodes, although this would not be optimal when allowing diagonal movement.  The problem is that a <strong>Euclidean</strong> heuristic wouldn't be admissable (it would over-estimate the cost), as movement between diagonal and adjacent nodes are treated the same, and on a grid (unless it's hexagonal in nature) this isn't true.  To understand more about heuristics, I'd recommend reading <a href="http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html">this article</a>, as it goes into great detail regarding the topic.  Instead of <strong>Euclidean</strong>, the <strong>Chebyshev</strong> distance can be used, which is: <code>max(x, y)</code>.</p>
+
+    <script src="https://gist.github.com/onemandan/00042133f0b45f59ea11f70f29c5f88d.js"></script>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/path-diagonal.png" alt="path with diagonal traversal">
+        <figcaption>A* accounting for diagonal traversal</figcaption>
+    </figure>
+
+    <p>To test the 2 different heuristics and visually see the differences between diagonal and non-diagonal movement, an <code>options</code> parameter was added to the <code>AStar</code> function.  Within the function, if options aren't present, it defaults to allowing diagonal movement and using the <strong>Chebyshev</strong> heuristic (defined by an enum).  The <code>Neighbour</code> function now returns all 8 potential neighbours, which has allowed the A* algorithm to account for diagonal traversal.</p>
+</section>
+
+<hr>
+
+<section>
+    <h4 class="text-center mb-4">Animating the Path</h4>
+
+    <p>At the moment, the user can only press the <code>enter</code> key to regenerate the tilemap and the path.  On top of that, the path is <em>always</em> from the top left corner, to the bottom right corner.  It would be more interesting if the user could interact with the project and choose a path to draw, by clicking the tilemap to provide the end node.</p>
+
+    <figure class="text-center figure-right">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/state-machine.png" alt="state machine for path drawing">
+        <figcaption>States for the path being drawn</figcaption>
+    </figure>
+
+    <p>The way I envisioned this to work, is that the initial start position on page load is <em>always</em> the top left corner.  When the user clicks on the tilemap, the path will be drawn, tile by tile, from the start position, to the end position.  Once the end position has been reached, the path will be cleared, tile by tile, from the start position, to the end position, which will then become the new start position. </p> 
+
+    <p>To implement this functionality, multiple changes need to be made, including implementing a <code>GameTick</code> function that will be called each game tick.  A simple <strong>state machine</strong> will need to be created, with <code>idle</code>, <code>draw</code> and <code>clear</code> stages.  When the state is <code>idle</code>, nothing occurs.  When the mouse is pressed however, the state is set to <code>draw</code> and within the <code>GameTick</code> function, the path obtained from the A* algorithm is drawn node by node, until the final node is reached.  Once the final node is reached, the path is iterated again, although this time, the tiles are cleared from the tilemap.  Once cleared, the state is set to <code>idle</code> once more, awaiting user input.</p>
+
+    <p>Firstly, the <code>GenerateTilemap</code> function needs to be changed to reinitialise a <code>path</code> object, which will be utilised to store all the required information to draw the path.  The tilemap will also be referenced from within the <code>GameTick</code> function, so it will be lifted to the global scope.</p>
+
+    <script src="https://gist.github.com/onemandan/4ed3427c58c691268e230574eae07abb.js"></script>
+
+    <p>As the path is going to be drawn to the tilemap within the <code>GameTick</code> function, the <code>DrawTilemapPath</code> function can be removed.  The <code>create</code> function needs to be modified to include the event listener for the mouse press, where the <code>_path</code> global variable properties will be set.  Within the <code>pointerdown</code> event listener, the tile position can be obtained from the tilemaps <code>worldToTileX</code> and <code>worldToTileY</code> functions.</p>
+
+    <script src="https://gist.github.com/onemandan/59e2fade950aa59efc5e8006a900f3f8.js"></script>
+
+    <p>Everything is in place to create the <code>GameTick</code> function, and within it, the basic state machine that will both draw and clear the path.  Hopefully, the pseudocode below will explain how to draw the path within the update function and set the new start position:</p>
+
+    <pre>
+if state is idle, do nothing
+    if current_node_index is less than nodes_length
+        if state is draw
+            draw current_node
+
+        if state is clear
+            if current_node_index is nodes_length - 1
+                clear current_node
+            otherwise
+                start_position is current_node_position
+
+        increment current_node_index
+    otherwise
+        current_node_index is 0
+        increment state
+    </pre>
+
+    <script src="https://gist.github.com/onemandan/f4152455de616076749a9e6c53028d7f.js"></script>
+
+    <figure class="text-center figure-right">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/path-animated.gif" alt="animated path">
+        <figcaption>Animated path using user input</figcaption>
+    </figure>
+
+    <p>As <code>drawState</code> is an <strong>enum</strong> created with integers, it can simply be incremented once the end of the path nodes has been reached, meaning the state increments from Draw > Clear > Idle.  The drawing of the tile is done by utilising the tilemaps <code>putTileAt</code> function, with the tileset index of the path indicidator (10).  To clear, the <code>putTileAt</code> function is utilised again, although this time with a tileset index of -1.  The path is no longer static! It's animated with the users input. </p>
+</section>
+
+<hr>
+
+<section>
+    <h4 class="text-center mb-4">Finishing Touches</h4>
+
+    <figure class="text-center figure-left">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/island-tileset.gif" alt="new tilset">
+        <figcaption>Island tileset</figcaption>
+    </figure>
+
+    <p>I created a new <a href="/assets/projects/pathfinding-v2/resources/tileset.png">tileset</a> to improve the look and feel of the tilemap.  To create islands, indexes 0-5 are water, 6 sand and 7-9 grass.  Currently, all tiles can be explored by the A* algorithm, however, it would be interesting to see the algorithm avoid tiles by making certain indexes untraversable.  This means that there would be potential for there not to be a path available.  To show this visually, the Phaser camera <code>shake</code> function can be utilised.  To make specific nodes unable to be traversed, a new flag needs to be added to the <code>Node</code> class and then if the flag is set (using the weight), the node can be ignored within the A* algorithm main loop.  This could also be applied within the mouse pointer down event listener, so that any '<em>land</em>' tiles cannot be selected.</p>
+
+    <script src="https://gist.github.com/onemandan/1c357283f460db42395e4c2e61ecc81c.js"></script>
+
+    <figure class="text-center figure-right">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/tilemap-traversable.gif" alt="tilemap with untraversable nodes">
+        <figcaption>Tilemap with untraversable nodes</figcaption>
+    </figure>
+
+    <p>The A* algorithm now disregards the highest 2 tileset indexes and when clicked, since a path cannot be found, nothing is drawn to the tilemap and the camera shakes.</p>
+
+    <p>The path should be able to traverse the '<em>water</em>' and lower index '<em>land</em>' tileset indexes, although the weight should be <em>felt</em> in some way.  Firstly, the '<em>water</em>' should be favoured and therefore the weight of the remaining tileset indexes should be vastly increased.  Within the <code>GameTick</code> function, depending on the weight of the node, there should be a delay until the next node in the path is drawn, which can be done by having a variable <code>baseTraversalSpeed</code> multiplied against the weight of the node, added to the <code>GameTick</code> functions <code>time</code> parameter, and adding a check to ensure this amount of time has been passed.  Another attribute needs to be added to the <code>Node</code> class, to determine if it has been displayed.  A <strong>ternary</strong> can be used to set the weight of the <code>Node</code> so that if it is not a '<em>water</em>' tileset index, it is multiplied by 10, meaning that overall with these changes, the higher the weight, the longer the time before the next node can be placed, which is greatly increased when on the '<em>land</em>' tileset indexes.</p>
+
+    <script src="https://gist.github.com/onemandan/3707c19e95aa143e461ae28833e89318.js"></script>
+
+    <figure class="text-center">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/path-diagonal.gif" alt="diagonal path">
+        <figcaption>Diagonal pathfinding</figcaption>
+    </figure>
+
+    <figure class="text-center">
+        <img class="rounded" src="/assets/images/posts/{{ page.title }}/path-manhattan.gif" alt="manhattan path">
+        <figcaption>Non-diagonal pathfinding</figcaption>
+    </figure>
+</section>

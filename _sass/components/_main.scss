@@ -21,6 +21,10 @@ hr {
     width: 100%;
 }
 
+.gist {
+    clear: both;
+}
+
 #div-wrapper {
     background-color: $colour-background-primary;
     box-shadow: $boxshadow-outline $colour-shadow-primary;
