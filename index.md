@@ -1,6 +1,6 @@
 ---
 layout: default
-title: About
+title: About Daniel Hough, AKA onemandan
 description: A brief summary of Daniel Hough, AKA onemandan
 ---
 
